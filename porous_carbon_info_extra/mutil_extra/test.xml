@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  这是一个描述多孔炭材料合成流程的XML文件。
+  它定义了流程中的各个步骤（节点）和它们之间的关系（连接）。
+  可以使用这个文件作为数据源，通过编程方式生成可视化流程图。
+-->
+<flowchart name="PorousCarbonSynthesisProcess">
+  <nodes>
+    <!-- 1. 起始材料/前驱体 -->
+    <node id="step1" type="material">
+      <title>选择前驱体</title>
+      <description>选择合适的含碳前驱体，如生物质（木材、果壳）、聚合物、煤焦油等。</description>
+    </node>
+
+    <!-- 2. 预处理 -->
+    <node id="step2" type="process">
+      <title>预处理</title>
+      <description>对前驱体进行物理或化学处理，如粉碎、干燥、清洗、混合活化剂等。</description>
+    </node>
+
+    <!-- 3. 碳化 -->
+    <node id="step3" type="process">
+      <title>碳化（热解）</title>
+      <description>在惰性气氛（如氮气、氩气）下进行高温加热（通常为400-800°C），将前驱体转化为初步的炭材料。</description>
+    </node>
+
+    <!-- 4. 活化过程 (这是一个决策点) -->
+    <node id="step4_decision" type="decision">
+      <title>选择活化方法</title>
+      <description>选择物理活化或化学活化来制造孔隙结构。</description>
+    </node>
+
+    <!-- 4a. 物理活化 -->
+    <node id="step4a" type="process">
+      <title>物理活化</title>
+      <description>在高温下（700-1000°C），使用活化气体（如水蒸气、二氧化碳）与碳化产物反应，刻蚀出孔道。</description>
+    </node>
+
+    <!-- 4b. 化学活化 -->
+    <node id="step4b" type="process">
+      <title>化学活化</title>
+      <description>将碳化产物与化学活化剂（如KOH, H3PO4, ZnCl2）混合，在较高温度下热处理，然后通过化学反应造孔。</description>
+    </node>
+
+    <!-- 5. 后处理 -->
+    <node id="step5" type="process">
+      <title>后处理</title>
+      <description>去除残留的活化剂、无机盐和杂质。通常包括酸洗、水洗至中性，然后干燥。</description>
+    </node>
+
+    <!-- 6. 最终产品 -->
+    <node id="step6" type="product">
+      <title>多孔炭材料</title>
+      <description>获得具有高比表面积和发达孔隙结构的最终产品。</description>
+    </node>
+  </nodes>
+
+  <connections>
+    <!-- 定义流程的连接顺序 -->
+    <connection from="step1" to="step2" label="进行"/>
+    <connection from="step2" to="step3" label="进行"/>
+    <connection from="step3" to="step4_decision" label="得到碳化料"/>
+    
+    <!-- 从决策点到两个分支 -->
+    <connection from="step4_decision" to="step4a" label="选择物理法"/>
+    <connection from="step4_decision" to="step4b" label="选择化学法"/>
+
+    <!-- 两个分支汇合到后处理 -->
+    <connection from="step4a" to="step5" label="活化完成"/>
+    <connection from="step4b" to="step5" label="活化完成"/>
+
+    <!-- 最后步骤 -->
+    <connection from="step5" to="step6" label="处理完毕，得到"/>
+  </connections>
+</flowchart>
