@@ -2,7 +2,7 @@
 import json
 import os
 import time # 引入 time 模块用于可能的延迟
-from zhipuai import ZhipuAI
+from zai import ZhipuAI
 import json_repair
 import shutil
 # 假设您已将之前的提示词保存为 prompts_script.py 文件
