@@ -123,7 +123,7 @@ prompt_1_4 = """
     * 先输出通用测试条件，然后为每个样本生成一个信息记录。
     * 格式：
         通用测试条件: {电极系统: ${类型}$, 电解液: ${值}$, 三电极电压窗口: ${值}$ V, 二电极电压窗口: ${值}$ V};
-        样本名称1: {比电容: ["${值1}$ F/g @ ${条件1}$", "${值2}$ F/g @ ${条件2}$"], 能量密度: "${值}$ Wh/kg @ ${条件}$", 功率密度: "${值}$ W/kg @ ${条件}$", 循环稳定性: "${圈数}$次, ${保持率}$%", ESR: ${值}$ Ω, Rct: ${值}$ Ω, 电导率: ${值}$ S/cm};
+        样本名称1: {比电容: ["${值1}$ F/g @ ${条件1}$", "${值2}$ F/g @ ${条件2}$"], 最大能量密度: "${值}$ Wh/kg @ ${条件}$", 最大功率密度: "${值}$ W/kg @ ${条件}$", 循环稳定性: "${圈数}$次, ${保持率}$%", ESR: ${值}$ Ω, Rct: ${值}$ Ω, 电导率: ${值}$ S/cm};
         样本名称2: {比电容: ..., 能量密度: ..., ...};
         ...
 
@@ -185,8 +185,8 @@ Task Steps
         "Electrolyte": "Electrolyte Name and Concentration",
         "Voltage Window": {"value": [min, max], "unit": "V"}, // Specify if 3-electrode or 2-electrode window if different and known
         "Specific Capacitance": [{"value": number, "unit": "F/g", "condition": {"value": number, "unit": "A/g or mV/s"}}, ... ] or null, // List format
-        "Energy Density": {"value": number, "unit": "Wh/kg", "condition": "optional condition e.g. @ X W/kg"} or null,
-        "Power Density": {"value": number, "unit": "W/kg", "condition": "optional condition e.g. @ Y Wh/kg"} or null,
+        "Max Energy Density": {"value": number, "unit": "Wh/kg", "condition": "optional condition e.g. @ X W/kg"} or null,
+        "Max Power Density": {"value": number, "unit": "W/kg", "condition": "optional condition e.g. @ Y Wh/kg"} or null,
         "Cycle Stability": {"Cycle Number": {"value": number}, "Capacity Retention": {"value": number, "unit": "%"}} or null,
         "Equivalent Series Resistance (ESR)": {"value": number, "unit": "Ω"} or null,
         "Charge Transfer Resistance (Rct)": {"value": number, "unit": "Ω"} or null,

@@ -42,7 +42,7 @@ system_structure = '''You are a database construction expert responsible for con
 
 # API Call Configuration
 # API 调用配置
-MODEL_VERSION = "glm-4-air-250414" # 或者 "glm-4-air", "glm-4-airx" 等
+MODEL_VERSION = "glm-4.5" # 或者 "glm-4-air", "glm-4-airx" 等
 API_RETRY_DELAY = 5 # seconds (API 调用重试延迟)
 API_MAX_RETRIES = 3 # 最大重试次数
 
@@ -89,7 +89,7 @@ def zhipu_api_call(text_input, system_prompt, user_prompt, model=MODEL_VERSION, 
                 messages=messages,
                 top_p=0.7,
                 temperature=0.1,
-                max_tokens=4000, # 根据需要调整 (Adjust as needed)
+                max_tokens=8000, # 根据需要调整 (Adjust as needed)
                 # tools=[{"type": "web_search", "web_search": {"search_result": False}}], # 根据需要启用/禁用 (Enable/disable as needed)
                 stream=False
             )
