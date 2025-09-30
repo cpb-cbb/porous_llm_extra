@@ -4,7 +4,7 @@ import os
 import time # 引入 time 模块用于可能的延迟
 from zai import ZhipuAiClient
 from servers.utils import TextProcess
-from servers.utils.prompts_en import prompt_1_3
+from servers.utils.prompts_en import prompt_1_4
 processor = TextProcess.TextProcessor()
 # --- Configuration ---
 # 从环境变量读取 API Key (Read API Key from environment variable)
@@ -17,7 +17,7 @@ client = ZhipuAiClient(api_key=api_key)
 
 # API Call Configuration
 # API 调用配置
-MODEL_VERSION = "glm-4.5-air" # 或者 "glm-4-air", "glm-4-airx" 等
+MODEL_VERSION = "glm-4.5" # 或者 "glm-4-air", "glm-4-airx" 等
 API_RETRY_DELAY = 5 # seconds (API 调用重试延迟)
 API_MAX_RETRIES = 3 # 最大重试次数
 
@@ -33,7 +33,7 @@ def parse_non_streaming_response(response):
         print(f"原始响应 (Original response): {response}")
         return None
 
-def micro_feature_extra(text_input:str) -> str:
+def ele_chem_extra(text_input:str) -> str:
     """多孔炭工艺信息提取 (Process extraction of technical information)
     处理文本输入，调用 ZhipuAI API 并返回提取结果 (Processes text input, calls ZhipuAI API, and returns extraction result)
     """
@@ -45,7 +45,7 @@ def micro_feature_extra(text_input:str) -> str:
             messages=[
                 {
                     "role": "system",
-                    "content": prompt_1_3
+                    "content": prompt_1_4
                 },
                 {
                     "role": "user",
@@ -88,5 +88,5 @@ if __name__ == '__main__':
     # print(answer)
     pdf_path="/Users/caopengbo/Downloads/1-s2.0-S0360544220323343-main.pdf"
     pdf_content = processor.read_pdf(pdf_path)
-    extracted_info = micro_feature_extra(pdf_content)
+    extracted_info = ele_chem_extra(pdf_content)
     print(extracted_info)
