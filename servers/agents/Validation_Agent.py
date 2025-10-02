@@ -33,7 +33,7 @@ def parse_non_streaming_response(response):
         print(f"原始响应 (Original response): {response}")
         return None
 
-def verifie(text_input:str, answer:str) -> str:
+def verifie_agent(text_input:str, answer:str) -> str:
     """多孔炭工艺信息提取 (Process extraction of technical information)
     处理文本输入，调用 ZhipuAI API 并返回提取结果 (Processes text input, calls ZhipuAI API, and returns extraction result)
     """
@@ -91,5 +91,5 @@ if __name__ == '__main__':
     # print(answer)
     pdf_path="/Users/caopengbo/Downloads/1-s2.0-S0360544220323343-main.pdf"
     pdf_content = processor.read_pdf(pdf_path)
-    extracted_info = verifie(pdf_content)
+    extracted_info = verifie_agent(pdf_content)
     print(extracted_info)

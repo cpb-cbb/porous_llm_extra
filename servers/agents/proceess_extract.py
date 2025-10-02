@@ -2,6 +2,7 @@
 
 import os
 import time # 引入 time 模块用于可能的延迟
+import json_repair
 from zai import ZhipuAiClient
 from servers.utils import TextProcess
 from servers.utils.prompts_en import prompt_1_2
@@ -63,6 +64,7 @@ def process_extra(text_input:str) -> str:
                 stream=False
             )
             response_text = parse_non_streaming_response(response)
+            response_text = json_repair.loads(response_text)
             if response_text:
                 return response_text
             else:

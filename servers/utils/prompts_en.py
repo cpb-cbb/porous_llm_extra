@@ -108,7 +108,6 @@ prompt_1_2 = """
 
 # --- Step 1.3: Physical & Chemical Properties Extraction (Refined) ---
 prompt_1_3 = """
-
 **Role Setting:** Material Physicochemical Properties Analysis Expert
 **Task:** For the specified sample list, accurately extract physicochemical property data into a structured JSON format.
 
@@ -125,6 +124,7 @@ prompt_1_3 = """
     *   **MicroporeVolume**: (Unit: cm³/g; specify method, e.g., DFT, t-plot)
     *   **MesoporeVolume**: (Unit: cm³/g)
     *   **PoreSizeDistribution**: (nm; summarize key peak positions from the plot, e.g., "Peaks at <2 nm and 3.8 nm")
+    *   **AveragePoreDiameter**: (Unit: nm; if available)
 
 2.  **Surface Chemistry and Composition**:
     *   **ElementalComposition**: Extract atomic (at%) or weight (wt%) for all reported elements (C, O, N, S, P, etc.).
@@ -156,6 +156,7 @@ prompt_1_3 = """
             "SpecificSurfaceArea_BET": {"value": 1500, "unit": "m²/g"},
             "TotalPoreVolume": {"value": 0.85, "unit": "cm³/g"},
             "MicroporeVolume": {"value": 0.60, "unit": "cm³/g", "method": "DFT"},
+
             "PoreSizeDistribution": "Peaks at 0.8 nm and 1.5 nm"
         },
         "Composition": {
@@ -293,7 +294,6 @@ prompt_batch_verifier_and_corrector = """
 
 *   **If and ONLY IF** the `json_batch_to_verify` is a perfect match with the information in the `full_text` for **ALL** samples contained within it, your **entire output** must be the single uppercase character:
     `T`
-
 *   **If you find ANY discrepancy for ANY sample**, you must **NOT** output `T`. Instead, you are required to:
     1.  Use the `full_text` as the single source of truth to correct all identified errors across all samples.
     2.  Construct the **fully corrected** version of the entire original JSON object. This means if only one sample had an error, you still output the complete JSON with all samples, with the incorrect one fixed.
