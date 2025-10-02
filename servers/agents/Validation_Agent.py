@@ -31,6 +31,7 @@ _VERIFICATION_AGENT = BatchVerificationAgent()
 
 def verifie_agent(*, text_input: str, answer: str | None):
     if answer is None:
+        print("待验证内容为空，结束处理。")
         return None
     return _VERIFICATION_AGENT.run(text_input=text_input, answer=answer)
 
