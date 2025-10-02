@@ -1,10 +1,11 @@
 import json
-from typing import List, Dict, Any
+from typing import Any, Dict, List, Optional
+
 
 def merge_agent_outputs_simple(
-    synthesis_data: Dict[str, Any],
-    properties_data: Dict[str, Any],
-    performance_data: Dict[str, Any],
+    synthesis_data: Optional[Dict[str, Any]],
+    properties_data: Optional[Dict[str, Any]],
+    performance_data: Optional[Dict[str, Any]],
     sample_list: List[str]
 ) -> Dict[str, Any]:
     """
@@ -23,6 +24,10 @@ def merge_agent_outputs_simple(
         Dict[str, Any]: A unified dictionary with sample names as keys.
     """
     unified_results = {}
+
+    synthesis_data = synthesis_data or {}
+    properties_data = properties_data or {}
+    performance_data = performance_data or {}
 
     for sample_name in sample_list:
         # Initialize an entry for the current sample

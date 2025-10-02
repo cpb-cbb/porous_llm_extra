@@ -9,21 +9,31 @@ Version 4.0 (Streamlined for performance prediction modeling)
 prompt_1_1 = """
 Role Setting: Literature Screening and Sample Identification Expert
 Task: Strictly analyze the literature step-by-step to determine relevance and extract key sample information.
-Extraction Process:
-1.  **Document Relevance Judgment**:
-    * Carefully read the abstract, introduction, and experimental sections of the literature.
-    * Does this literature study or synthesize **porous carbon materials for supercapacitors**?
-    * If not, return directly: "This document does not meet the requirements."
-2.  **Sample Identification**:
-    * If yes, please identify **all** porous carbon material samples explicitly synthesized and characterized in the literature.
-    * List the **exact names** of these samples (e.g., PC-800, NPC-2, AC-KOH-900).
-3.  **Output Format**:
-    * If relevant, output a list containing the names of all identified samples.
-    * Format: `Sample List: [Sample Name 1, Sample Name 2, ...]`
 
-Notes:
-    * Only identify samples **experimentally synthesized** in the literature.
-    * Ensure sample names are accurate and consistent with the literature.
+General Requirements:
+* Always respond with a single valid JSON object and nothing else.
+* If the document is relevant, respond exactly with: {"status": "relevant", "samples": ["Sample Name 1", ...]}
+* If the document is not relevant, respond exactly with: {"status": "irrelevant", "samples": [], "reason": "This document does not meet the requirements."}
+* Never add prefixes such as "Relevant:" or extra prose. Only output the raw JSON.
+* Sample names must match the literature exactly (trim whitespace, preserve case).
+
+Extraction Process:
+1. Document Relevance Judgment:
+    * Carefully read the abstract, introduction, and experimental sections of the literature.
+    * Determine whether this literature studies or synthesizes porous carbon materials for supercapacitors.
+
+2. Sample Identification:
+    * If relevant, identify all porous carbon material samples explicitly synthesized and characterized in the literature.
+    * List the exact names of these samples (e.g., PC-800, NPC-2, AC-KOH-900).
+
+Quality Checks:
+* Only include samples experimentally synthesized within the study.
+* If multiple naming conventions exist, use the most explicit version provided.
+* Do not guess; if the information is unclear, return an empty list.
+
+Output Examples (for reference only, do not copy the text "Example"):
+Example relevant output: {"status": "relevant", "samples": ["PC-800", "NPC-2"]}
+Example irrelevant output: {"status": "irrelevant", "samples": [], "reason": "This document does not meet the requirements."}
 """
 
 # --- Step 1.2: Synthesis & Preparation Conditions Extraction (Refined) ---
@@ -102,8 +112,8 @@ prompt_1_2 = """
 }
 ```
 
-**输出要求**:
-请将结果最终以 JSON 格式输出，不要输出任何无关的解释或说明。
+**Output requirements**: 
+Please output the final result in JSON format only. Do not include any explanatory text, comments, or any other unrelated information.
 """
 
 # --- Step 1.3: Physical & Chemical Properties Extraction (Refined) ---
@@ -148,7 +158,7 @@ prompt_1_3 = """
 **Output Format Example:**
 *   Generate a single JSON object where keys are sample names.
 *   If information is not mentioned, use `null`.
-
+JSON example:
 ```json
 {
     "Sample Name 1": {
@@ -156,7 +166,8 @@ prompt_1_3 = """
             "SpecificSurfaceArea_BET": {"value": 1500, "unit": "m²/g"},
             "TotalPoreVolume": {"value": 0.85, "unit": "cm³/g"},
             "MicroporeVolume": {"value": 0.60, "unit": "cm³/g", "method": "DFT"},
-
+            "MesoporeVolume": {"value": null, "unit": "cm³/g"},
+            "AveragePoreDiameter": {"value": null, "unit": "nm"},
             "PoreSizeDistribution": "Peaks at 0.8 nm and 1.5 nm"
         },
         "Composition": {
@@ -188,8 +199,8 @@ prompt_1_3 = """
 }
 ```
 
-**输出要求**:
-请将结果最终以 JSON 格式输出，不要输出任何无关的解释或说明。
+**Output requirements**: 
+Please output the final result in JSON format only. Do not include any explanatory text, comments, or any other unrelated information.
 """
 
 # --- Step 1.4: Electrochemical Performance Extraction (Streamlined) ---
@@ -267,9 +278,8 @@ prompt_1_4 = """
     ]
 }
 ```
-
-**输出要求**:
-请将结果最终以 JSON 格式输出，不要输出任何无关的解释或说明。
+**Output requirements**: 
+Please output the final result in JSON format only. Do not include any explanatory text, comments, or any other unrelated information.
 """
 
 # --- Step 2 (Final, Batch Mode): Batch Verification & Correction Agent ---
@@ -286,7 +296,7 @@ prompt_batch_verifier_and_corrector = """
 1.  I need to treat this as a high-stakes audit. The goal is 100% accuracy for the whole batch.
 2.  I will iterate through each `sample_name` in the keys of the `json_batch_to_verify`.
 3.  For each sample, I will perform the same rigorous checks as before: locate the sample's data in the `full_text` and verify every key-value pair.
-4.  I must check for factual errors, data misalignment (错位), and omissions for *every single sample*.
+4.  I must check for factual errors, data misalignment , and omissions for *every single sample*.
 5.  I will keep track of any discrepancies found. If even one value for one sample is wrong, the entire batch fails the "perfect match" test.
 6.  If any corrections are needed, I will create a new, corrected version of the entire JSON object, preserving the original structure.
 
