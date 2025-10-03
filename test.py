@@ -5,7 +5,7 @@ if __name__ == "__main__":
     # 示例输入文本文件路径
     input_txt_path = "/Volumes/mac_outstore/毕业/测试集文献/10.1016_j.est.2023.109094.json"
     # 输出 JSON 文件路径
-    output_json_path = "/Volumes/mac_outstore/毕业/测试集文献/data/extracted_output.json"
+    output_json_path = "/Volumes/mac_outstore/毕业/测试集文献/data/extracted_output-gemini.json"
     if not os.path.exists(os.path.dirname(output_json_path)):
         os.makedirs(os.path.dirname(output_json_path))
     # 确保输入文件存在
