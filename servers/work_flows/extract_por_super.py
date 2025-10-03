@@ -1,4 +1,5 @@
 # 运行抽取 workflow
+import shutil
 from servers.agents.ele_chem_extract import ele_chem_extra
 from servers.agents.pore_parameter_extract import micro_feature_extra
 from servers.agents.proceess_extract import process_extra
@@ -51,6 +52,7 @@ def loop_extract(agent_name, text_input, max_iter: int = 3):
     return json_repair.loads(current_answer)
 
 def run_extraction_workflow(input_txt_path, output_json_path):
+    unrelevant_dir = os.path.join(os.path.dirname(input_txt_path), "unrelevant")
     # 读取输入文本
     text_input = processor.read_json(input_txt_path) 
     print(f"读取输入文本，开始预判断...")
@@ -60,6 +62,10 @@ def run_extraction_workflow(input_txt_path, output_json_path):
     name_list = name_dict.get("samples", [])
     if not name_list:
         print("论文不相关，结束处理。")
+        #将无关文件移到无关文件夹
+        if not os.path.exists(unrelevant_dir):
+            os.makedirs(unrelevant_dir)
+        shutil.move(input_txt_path, os.path.join(unrelevant_dir, os.path.basename(input_txt_path)))
         return
     #输入文本应该为样本列表以及原文组成的字符串
     input_content = f"Sampleslist: {name_list}\n\nOriginal Text:\n{text_input}"

@@ -206,6 +206,12 @@ Please output the final result in JSON format only. Do not include any explanato
 # --- Step 1.4: Electrochemical Performance Extraction (Streamlined) ---
 prompt_1_4 = """
 
+好的，这是一个非常专业的修改。为了将负载量（mass loading）作为一个独立的、对机器学习模型友好的特征进行提取，我们将在`SpecificCapacitance`的数据结构中添加一个`mass_loading`字段。
+
+以下是为您更新后的提示词。修改的部分主要在`SpecificCapacitance`的提取规则和输出格式示例中，并用**粗体**标出。
+
+---
+
 **Role Setting:** Electrochemical Performance Data Extraction Expert
 **Task:** For each sample, extract the core electrochemical performance under **different test systems**. This version is optimized for clarity, accuracy, and modeling needs.
 
@@ -231,8 +237,11 @@ prompt_1_4 = """
     --- Three-electrode System Specific Data ---
     *   **SpecificCapacitance**:
         *   **Extract ONLY in three-electrode systems.**
-        *   Provide all reported data points as a list, covering a range from low to high conditions (current density or scan rate).
-        *   Format: `[{method: "GCD", value: 350, unit: "F/g", condition: "1 A/g"}, ...]`.
+        *   Provide all reported data points as a list, covering a range from low to high conditions.
+        *   **For each data point, explicitly extract the mass loading of the active material as a separate field.**
+        *   The `condition` field should describe the rate (current density or scan rate).
+        *   **Format: `[{method: "GCD", value: 350, unit: "F/g", condition: "1 A/g", mass_loading: "1.2 mg/cm^2"}, ...]`.**
+        *   **If mass loading is not mentioned for a specific data point, use `null` for the `mass_loading` field.**
     *   **RateCapability**:
         *   **Extract ONLY in three-electrode systems.**
         *   Format: "85% (from 1 A/g to 20 A/g)".
@@ -257,8 +266,9 @@ prompt_1_4 = """
             "Electrolyte": "6M KOH",
             "VoltageWindow": "[-1, 0] V",
             "SpecificCapacitance": [
-                {"method": "GCD", "value": 350, "unit": "F/g", "condition": "1 A/g"},
-                {"method": "GCD", "value": 280, "unit": "F/g", "condition": "20 A/g"}
+                {"method": "GCD", "value": 350, "unit": "F/g", "condition": "1 A/g", "mass_loading": "1.1 mg/cm^2"},
+                {"method": "GCD", "value": 280, "unit": "F/g", "condition": "20 A/g", "mass_loading": "2 mg/cm^2"},
+                {"method": "CV", "value": 355, "unit": "F/g", "condition": "5 mV/s", "mass_loading": "1.1 mg/cm^2"}
             ],
             "RateCapability": "80% (from 1 A/g to 20 A/g)",
             "Impedance": {"ESR": 0.5, "Rct": 1.2, "unit": "Ω"}
