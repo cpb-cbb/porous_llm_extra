@@ -51,8 +51,8 @@ class BaseZhipuAgent:
         self._settings = settings
         self.provider = self._settings.resolve_provider(provider)
         api_key = self._settings.require_api_key(self.provider)
-        print(f"Using LLM provider: {self.provider}")
-        print(f"Using LLM model: {model or self._settings.resolve_model(self.provider)}")
+        # print(f"Using LLM provider: {self.provider}")
+        # print(f"Using LLM model: {model or self._settings.resolve_model(self.provider)}")
         
         if self.provider in {"zhipu", "glm"}:
             self.client = ZhipuAiClient(api_key=api_key)

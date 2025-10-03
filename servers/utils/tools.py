@@ -35,15 +35,15 @@ def merge_agent_outputs_simple(
 
         # Check if synthesis data exists for this sample and add it if so.
         if sample_name in synthesis_data:
-            unified_results[sample_name]["Synthesis"] = synthesis_data[sample_name]
+            unified_results[sample_name]["Synthesis"] = synthesis_data.get(sample_name, {})
 
         # Check if physicochemical properties data exists and add it.
         if sample_name in properties_data:
-            unified_results[sample_name]["PhysicochemicalProperties"] = properties_data[sample_name]
-            
+            unified_results[sample_name]["PhysicochemicalProperties"] = properties_data.get(sample_name, {})
+
         # Check if electrochemical performance data exists and add it.
         if sample_name in performance_data:
-            unified_results[sample_name]["ElectrochemicalPerformance"] = performance_data[sample_name]
+            unified_results[sample_name]["ElectrochemicalPerformance"] = performance_data.get(sample_name, {})
 
     return unified_results
 

@@ -1,5 +1,5 @@
 from servers.work_flows.extract_por_super import run_extraction_workflow
-
+from core.config import settings
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import os
 
@@ -42,7 +42,8 @@ if __name__ == "__main__":
     # 单文件示例；如需批量处理将其设为 None
     input_txt_path = None
     output_json_path = "/Volumes/mac_outstore/毕业/测试集文献/data/extracted_output.json"
-
+    llm_engine = settings.llm_provider  # 可选 "zhipu" 或 "gemini"
+    print(f"使用的 LLM 引擎: {llm_engine}, 版本: {settings.llm_model}")
     if input_txt_path:
         if not os.path.exists(os.path.dirname(output_json_path)):
             os.makedirs(os.path.dirname(output_json_path))
@@ -53,6 +54,6 @@ if __name__ == "__main__":
             print(f"抽取结果已保存到 {output_json_path}。")
     else:
         input_dir = "/Volumes/mac_outstore/毕业/测试集文献"
-        output_dir = os.path.join(input_dir, "batch_outputs")
+        output_dir = os.path.join(input_dir, llm_engine)
         max_workers = 4
         process_directory(input_dir, output_dir, max_workers=max_workers)
