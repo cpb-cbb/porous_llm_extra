@@ -42,6 +42,9 @@ def process_directory(input_dir, output_dir, max_workers=None):
     
     workers = max_workers or os.cpu_count() or 1
     print(f"开始处理 {len(files_to_process)} 个文件,已跳过 {skipped} 个,使用 {workers} 个并发工作进程。")
+    # 输出需要处理的文件名称
+    for f in files_to_process:
+        print(f"待处理: {os.path.basename(f)}")
     
     completed = 0
     failed = 0

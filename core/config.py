@@ -8,6 +8,7 @@ from typing import Optional
 from pydantic import Field, ValidationError
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from dotenv import load_dotenv
 
 class Settings(BaseSettings):
     """Centralised project settings.

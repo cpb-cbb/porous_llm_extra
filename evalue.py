@@ -9,16 +9,34 @@ from rich.prompt import Prompt
 from rich.table import Table
 
 # --- 配置 ---
-EXTRACTED_DIR = 'extracted_results'  # 存放抽取结果的目录
-GROUND_TRUTH_DIR = 'ground_truth'    # 存放基准数据的目录
-OUTPUT_DIR = 'evaluation_reports'    # 存放评估报告的目录
+EXTRACTED_DIR = '/Volumes/mac_outstore/毕业/测试集文献/zhipu'
+GROUND_TRUTH_DIR = '/Volumes/mac_outstore/毕业/测试集文献/base_evalue_data'
+OUTPUT_DIR = '/Volumes/mac_outstore/毕业/测试集文献/evaluation_reports'
+PROGRESS_FILE = '/Volumes/mac_outstore/毕业/测试集文献/evaluation_reports/evaluation_progress.json'
 # ---
 
 console = Console()
 
+def load_progress():
+    """加载评估进度记录"""
+    progress_path = Path(PROGRESS_FILE)
+    if progress_path.exists():
+        try:
+            with open(progress_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except:
+            return {}
+    return {}
+
+def save_progress(progress):
+    """保存评估进度记录"""
+    progress_path = Path(PROGRESS_FILE)
+    progress_path.parent.mkdir(exist_ok=True)
+    with open(progress_path, 'w', encoding='utf-8') as f:
+        json.dump(progress, f, indent=2, ensure_ascii=False)
+
 def load_json(filepath):
     """加载 JSON 文件并处理可能的文件不存在错误"""
-    #仅加载micro_features和ele_chem_info作为比对，因为工艺信息过于主观，且变化较大，容易引入误差
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             data = json.load(f)
@@ -43,7 +61,6 @@ def count_total_facts(data):
         for item in data:
             count += count_total_facts(item)
     else:
-        # 这是一个叶节点,即一个事实
         count = 1
     return count
 
@@ -63,7 +80,7 @@ def evaluate_single_file(extracted_path, ground_truth_path, output_dir):
     diff = DeepDiff(ground_truth_data, extracted_data, ignore_order=True, verbose_level=2)
 
     # 初始化指标和结果记录
-    fp_count, fn_count = 0, 0
+    tp_count, fp_count, fn_count = 0, 0, 0
     evaluation_log = []
 
     # 3. 交互式评估差异
@@ -72,26 +89,47 @@ def evaluate_single_file(extracted_path, ground_truth_path, output_dir):
     if 'dictionary_item_added' in diff:
         for path in diff['dictionary_item_added']:
             value = diff['dictionary_item_added'][path]
+            facts_count = count_total_facts(value)
+            
             console.print(Panel(
-                f"[bold]路径:[/bold] {path}\n[bold]抽取值:[/bold] {value}",
+                f"[bold]路径:[/bold] {path}\n[bold]抽取值:[/bold] {value}\n[bold yellow]包含 {facts_count} 条事实[/bold yellow]",
                 title="[bold yellow]发现新增项 (Potential FP)[/bold yellow]",
                 border_style="yellow"
             ))
-            judgment = Prompt.ask("这是幻觉/错误抽取吗? (y/n/s for skip)", choices=['y', 'n', 's'], default='y')
+            judgment = Prompt.ask(
+                f"输入错误数量(0-{facts_count}), 或 y(全错)/n(全对)/s(跳过)",
+                default='y'
+            )
 
+            error_count = 0
             if judgment == 'y':
-                fp_count += 1
-                user_judgment = 'False Positive'
+                error_count = facts_count
+                user_judgment = f'False Positive (全部 {facts_count} 条)'
             elif judgment == 'n':
-                 user_judgment = 'Correct (Ignored)'
-            else:
+                error_count = 0
+                user_judgment = f'Correct (全部 {facts_count} 条)'
+            elif judgment == 's':
                 user_judgment = 'Skipped'
+            elif judgment.isdigit() and 0 <= int(judgment) <= facts_count:
+                error_count = int(judgment)
+                correct_count = facts_count - error_count
+                user_judgment = f'Partial ({error_count} 错误, {correct_count} 正确)'
+            else:
+                console.print("[bold red]输入无效,按全部错误处理[/bold red]")
+                error_count = facts_count
+                user_judgment = f'False Positive (全部 {facts_count} 条)'
+            
+            if judgment != 's':
+                fp_count += error_count
+                tp_count += (facts_count - error_count)
             
             evaluation_log.append({
                 'Path': path,
                 'Difference Type': 'Item Added',
                 'Ground Truth Value': 'N/A',
                 'Extracted Value': value,
+                'Facts Count': facts_count,
+                'Error Count': error_count,
                 'User Judgment': user_judgment
             })
 
@@ -99,67 +137,126 @@ def evaluate_single_file(extracted_path, ground_truth_path, output_dir):
     if 'dictionary_item_removed' in diff:
         for path in diff['dictionary_item_removed']:
             value = diff['dictionary_item_removed'][path]
+            facts_count = count_total_facts(value)
+            
             console.print(Panel(
-                f"[bold]路径:[/bold] {path}\n[bold]基准值:[/bold] {value}",
+                f"[bold]路径:[/bold] {path}\n[bold]基准值:[/bold] {value}\n[bold yellow]包含 {facts_count} 条事实[/bold yellow]",
                 title="[bold red]发现缺失项 (Potential FN)[/bold red]",
                 border_style="red"
             ))
-            judgment = Prompt.ask("这是漏报/未抽到吗? (y/n/s for skip)", choices=['y', 'n', 's'], default='y')
+            judgment = Prompt.ask(
+                f"输入缺失数量(0-{facts_count}), 或 y(全部缺失)/n(全部存在)/s(跳过)",
+                default='y'
+            )
             
+            missing_count = 0
             if judgment == 'y':
-                fn_count += 1
-                user_judgment = 'False Negative'
+                missing_count = facts_count
+                user_judgment = f'False Negative (全部 {facts_count} 条)'
             elif judgment == 'n':
-                user_judgment = 'Correct (Ignored)'
-            else:
+                missing_count = 0
+                user_judgment = f'Correct (全部 {facts_count} 条)'
+            elif judgment == 's':
                 user_judgment = 'Skipped'
+            elif judgment.isdigit() and 0 <= int(judgment) <= facts_count:
+                missing_count = int(judgment)
+                found_count = facts_count - missing_count
+                user_judgment = f'Partial ({missing_count} 缺失, {found_count} 正确)'
+            else:
+                console.print("[bold red]输入无效,按全部缺失处理[/bold red]")
+                missing_count = facts_count
+                user_judgment = f'False Negative (全部 {facts_count} 条)'
+            
+            if judgment != 's':
+                fn_count += missing_count
+                tp_count += (facts_count - missing_count)
                 
             evaluation_log.append({
                 'Path': path,
                 'Difference Type': 'Item Removed',
                 'Ground Truth Value': value,
                 'Extracted Value': 'N/A',
+                'Facts Count': facts_count,
+                'Missing Count': missing_count,
                 'User Judgment': user_judgment
             })
             
-    # 3.3 处理值变化 (FP + FN)
+     # 3.3 处理值变化 (FP + FN)
     if 'values_changed' in diff:
         for path, changes in diff['values_changed'].items():
             old_val, new_val = changes['old_value'], changes['new_value']
+            
+            facts_count = count_total_facts(old_val)
+            
             console.print(Panel(
-                f"[bold]路径:[/bold] {path}\n[bold red]基准值:[/bold red] {old_val}\n[bold yellow]抽取值:[/bold yellow] {new_val}",
+                f"[bold]路径:[/bold] {path}\n"
+                f"[bold red]基准值:[/bold red] {old_val}\n"
+                f"[bold yellow]抽取值:[/bold yellow] {new_val}\n"
+                f"[bold yellow]包含 {facts_count} 条事实[/bold yellow]",
                 title="[bold magenta]发现值不匹配 (Potential FP & FN)[/bold magenta]",
                 border_style="magenta"
             ))
-            judgment = Prompt.ask("这是一个抽取错误吗? (y/n/s for skip)", choices=['y', 'n', 's'], default='y')
+            
+            judgment = Prompt.ask(
+                f"输入错误数量(0-{facts_count}), 或 y(值错误)/n(值正确)/s(跳过)",
+                default='y'
+            )
 
+            error_count = 0
             if judgment == 'y':
-                fp_count += 1
-                fn_count += 1
-                user_judgment = 'Value Mismatch (FP & FN)'
+                error_count = facts_count
+                fp_count += error_count
+                user_judgment = f'Value Mismatch (FP & FN, {facts_count} 条)'
             elif judgment == 'n':
-                user_judgment = 'Correct (Ignored)'
-            else:
+                error_count = 0
+                tp_count += facts_count
+                user_judgment = f'Correct (值被接受, {facts_count} 条)'
+            elif judgment == 's':
                 user_judgment = 'Skipped'
+            elif judgment.isdigit() and 0 <= int(judgment) <= facts_count:
+                error_count = int(judgment)
+                correct_count = facts_count - error_count
+                if error_count > 0:
+                    fp_count += error_count
+                if correct_count > 0:
+                    tp_count += correct_count
+                user_judgment = f'Partial ({error_count} 错误, {correct_count} 正确)'
+            else:
+                console.print("[bold red]输入无效,按值错误处理[/bold red]")
+                error_count = facts_count
+                fp_count += error_count
+                fn_count += error_count
+                user_judgment = f'Value Mismatch (FP & FN, {facts_count} 条)'
 
             evaluation_log.append({
                 'Path': path,
                 'Difference Type': 'Value Changed',
                 'Ground Truth Value': old_val,
                 'Extracted Value': new_val,
+                'Facts Count': facts_count,
+                'Error Count': error_count,
                 'User Judgment': user_judgment
             })
 
     # 4. 计算最终指标
-    console.print("\n[bold cyan]评估完成，正在计算最终指标...[/bold cyan]")
+    console.print("\n[bold cyan]评估完成,正在计算最终指标...[/bold cyan]")
     
-    # 计算基准集中的事实总数
     total_facts_in_ground_truth = count_total_facts(ground_truth_data)
+    evaluated_facts = fp_count + fn_count + tp_count
+    unchanged_facts = total_facts_in_ground_truth - evaluated_facts
     
-    # TP = 基准集总事实数 - 漏报数
-    tp_count = total_facts_in_ground_truth - fn_count
-
-    # 计算 Precision, Recall, F1
+    if unchanged_facts > 0:
+        tp_count += unchanged_facts
+        console.print(f"[bold green]发现 {unchanged_facts} 条完全匹配的事实,已计入 TP[/bold green]")
+        evaluation_log.append({
+            'Path': 'N/A (Perfect Match)',
+            'Difference Type': 'No Difference',
+            'Ground Truth Value': 'N/A',
+            'Extracted Value': 'N/A',
+            'Facts Count': unchanged_facts,
+            'User Judgment': f'Perfect Match ({unchanged_facts} 条)'
+        })
+    
     precision = tp_count / (tp_count + fp_count) if (tp_count + fp_count) > 0 else 0
     recall = tp_count / (tp_count + fn_count) if (tp_count + fn_count) > 0 else 0
     f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
@@ -168,8 +265,8 @@ def evaluate_single_file(extracted_path, ground_truth_path, output_dir):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     csv_filename = output_dir / f'{extracted_path.stem}_report_{timestamp}.csv'
     with open(csv_filename, 'w', newline='', encoding='utf-8') as csvfile:
-        fieldnames = ['Path', 'Difference Type', 'Ground Truth Value', 'Extracted Value', 'User Judgment']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        fieldnames = ['Path', 'Difference Type', 'Ground Truth Value', 'Extracted Value', 'Facts Count', 'User Judgment']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames, extrasaction='ignore')
         writer.writeheader()
         writer.writerows(evaluation_log)
     console.print(f"[bold green]详细评估报告已保存到: {csv_filename}[/bold green]")
@@ -177,6 +274,9 @@ def evaluate_single_file(extracted_path, ground_truth_path, output_dir):
     # 6. 打印当前文件结果
     summary_panel = Panel(
         f"[bold]文件:[/bold] {extracted_path.name}\n"
+        f"[bold]基准集总事实数:[/bold] {total_facts_in_ground_truth}\n"
+        f"[bold]已评估事实数:[/bold] {evaluated_facts}\n"
+        f"[bold]完全匹配事实数:[/bold] {unchanged_facts}\n\n"
         f"[bold]True Positives (TP):[/bold] {tp_count}\n"
         f"[bold]False Positives (FP):[/bold] {fp_count}\n"
         f"[bold]False Negatives (FN):[/bold] {fn_count}\n\n"
@@ -190,12 +290,16 @@ def evaluate_single_file(extracted_path, ground_truth_path, output_dir):
     
     return {
         'filename': extracted_path.name,
+        'total_facts': total_facts_in_ground_truth,
+        'evaluated_facts': evaluated_facts,
+        'unchanged_facts': unchanged_facts,
         'tp': tp_count,
         'fp': fp_count,
         'fn': fn_count,
         'precision': precision,
         'recall': recall,
-        'f1_score': f1_score
+        'f1_score': f1_score,
+        'timestamp': timestamp
     }
 
 def evaluate_batch():
@@ -216,6 +320,9 @@ def evaluate_batch():
         console.print(f"[bold red]错误: 基准数据目录不存在 -> {ground_truth_dir}[/bold red]")
         return
     
+    # 加载评估进度
+    progress = load_progress()
+    
     # 获取所有 JSON 文件
     extracted_files = list(extracted_dir.glob('*.json'))
     
@@ -223,11 +330,33 @@ def evaluate_batch():
         console.print(f"[bold red]错误: 在 {extracted_dir} 中没有找到 JSON 文件[/bold red]")
         return
     
-    console.print(f"[bold]找到 {len(extracted_files)} 个文件待评估[/bold]")
+    # 统计已评估和待评估文件
+    evaluated_count = sum(1 for f in extracted_files if f.name in progress)
+    pending_count = len(extracted_files) - evaluated_count
+    
+    console.print(f"[bold]找到 {len(extracted_files)} 个文件: "
+                 f"[green]{evaluated_count} 个已评估[/green], "
+                 f"[yellow]{pending_count} 个待评估[/yellow][/bold]")
+    
+    if evaluated_count > 0:
+        reevaluate = Prompt.ask(
+            "是否重新评估已评估的文件?",
+            choices=['y', 'n'],
+            default='n'
+        )
+        if reevaluate == 'y':
+            progress = {}
+            console.print("[bold yellow]已清空评估进度,将重新评估所有文件[/bold yellow]")
     
     # 批量评估
     results = []
-    for extracted_file in extracted_files:
+    for i, extracted_file in enumerate(extracted_files, 1):
+        # 检查是否已评估
+        if extracted_file.name in progress:
+            console.print(f"\n[bold green]跳过已评估文件 ({i}/{len(extracted_files)}): {extracted_file.name}[/bold green]")
+            results.append(progress[extracted_file.name])
+            continue
+        
         # 查找对应的基准文件
         ground_truth_file = ground_truth_dir / extracted_file.name
         
@@ -235,9 +364,15 @@ def evaluate_batch():
             console.print(f"[bold yellow]警告: 未找到对应的基准文件 -> {ground_truth_file}[/bold yellow]")
             continue
         
+        console.print(f"\n[bold cyan]进度: {i}/{len(extracted_files)}[/bold cyan]")
         result = evaluate_single_file(extracted_file, ground_truth_file, output_dir)
+        
         if result:
             results.append(result)
+            # 保存进度
+            progress[extracted_file.name] = result
+            save_progress(progress)
+            console.print(f"[bold green]✓ 已保存评估进度[/bold green]")
     
     # 打印汇总结果
     if results:
@@ -247,6 +382,7 @@ def evaluate_batch():
         
         table = Table(title="所有文件评估指标")
         table.add_column("文件名", style="cyan")
+        table.add_column("总事实数", justify="right", style="white")
         table.add_column("TP", justify="right", style="green")
         table.add_column("FP", justify="right", style="red")
         table.add_column("FN", justify="right", style="red")
@@ -257,6 +393,7 @@ def evaluate_batch():
         for r in results:
             table.add_row(
                 r['filename'],
+                str(r['total_facts']),
                 str(r['tp']),
                 str(r['fp']),
                 str(r['fn']),
@@ -285,7 +422,7 @@ def evaluate_batch():
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         summary_file = output_dir / f'summary_{timestamp}.csv'
         with open(summary_file, 'w', newline='', encoding='utf-8') as csvfile:
-            fieldnames = ['filename', 'tp', 'fp', 'fn', 'precision', 'recall', 'f1_score']
+            fieldnames = ['filename', 'total_facts', 'tp', 'fp', 'fn', 'precision', 'recall', 'f1_score']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
             writer.writerows(results)
@@ -293,14 +430,12 @@ def evaluate_batch():
 
 
 if __name__ == "__main__":
-    # 选择评估模式
     mode = Prompt.ask(
         "请选择评估模式",
         choices=['single', 'batch'],
         default='batch'
     )
     if mode == 'single':
-        # 单文件评估 (保留原有功能)
         EXTRACTED_JSON_PATH = 'extracted_data.json'
         GROUND_TRUTH_JSON_PATH = 'ground_truth.json'
         OUTPUT_DIR_PATH = Path(OUTPUT_DIR)
@@ -312,5 +447,4 @@ if __name__ == "__main__":
             OUTPUT_DIR_PATH
         )
     else:
-        # 批量评估,由于工艺信息复杂，默认跳过对工艺信息的评估，仅评估数值较多的微观结构以及电化学特征
         evaluate_batch()
