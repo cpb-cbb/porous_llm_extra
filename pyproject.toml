@@ -5,11 +5,13 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = "==3.12.11"
 dependencies = [
+    "deepdiff>=8.6.1",
     "json-repair>=0.51.0",
     "openai>=2.1.0",
     "pandas>=2.3.2",
     "pydantic-settings>=2.10.1",
     "pymupdf>=1.26.4",
+    "rich>=14.1.0",
     "tqdm>=4.67.1",
     "zai-sdk>=0.0.3.6",
 ]

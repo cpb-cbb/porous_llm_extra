@@ -17,3 +17,11 @@ logs/
 .env
 .env.*.local
 .env.local
+
+# test file
+extracted_data.json
+ground_truth.json
+
+# evaluation results
+evaluation_reports/
+evaluation_report*.csv

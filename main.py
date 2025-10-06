@@ -7,9 +7,6 @@ def _process_single_file(args):
     input_path, output_dir = args
     base_name = os.path.splitext(os.path.basename(input_path))[0]
     output_path = os.path.join(output_dir, f"{base_name}_extracted.json")
-    # 若是果输出文件已存在则跳过
-    if os.path.exists(output_path):
-        return input_path, output_path, "skipped"
     run_extraction_workflow(input_path, output_path)
     return input_path, output_path, "completed"
 
@@ -26,42 +23,50 @@ def process_directory(input_dir, output_dir, max_workers=None):
     if not json_files:
         print(f"目录 {input_dir} 中未找到 JSON 文件。")
         return
-    workers = max_workers or os.cpu_count() or 1
-    print(f"开始处理 {len(json_files)} 个文件,使用 {workers} 个并发工作进程。")
     
-    # 统计信息
-    completed = 0
+    # 在提交任务前先过滤已存在的文件
+    files_to_process = []
     skipped = 0
+    for path in json_files:
+        base_name = os.path.splitext(os.path.basename(path))[0]
+        output_path = os.path.join(output_dir, f"{base_name}_extracted.json")
+        if os.path.exists(output_path):
+            skipped += 1
+            print(f"跳过: {os.path.basename(path)} (已存在)")
+        else:
+            files_to_process.append(path)
+    
+    if not files_to_process:
+        print(f"所有文件都已处理完成,跳过 {skipped} 个文件。")
+        return
+    
+    workers = max_workers or os.cpu_count() or 1
+    print(f"开始处理 {len(files_to_process)} 个文件,已跳过 {skipped} 个,使用 {workers} 个并发工作进程。")
+    
+    completed = 0
     failed = 0
     
     with ProcessPoolExecutor(max_workers=workers) as executor:
         futures = {
             executor.submit(_process_single_file, (path, output_dir)): path
-            for path in json_files
+            for path in files_to_process
         }
         
-        # 使用 tqdm 创建进度条
-        with tqdm(total=len(json_files), desc="处理进度", unit="文件") as pbar:
+        with tqdm(total=len(files_to_process), desc="处理进度", unit="文件") as pbar:
             for future in as_completed(futures):
                 src = futures[future]
                 try:
                     _, dst, status = future.result()
-                    if status == "skipped":
-                        skipped += 1
-                        pbar.set_postfix({"完成": completed, "跳过": skipped, "失败": failed})
-                        tqdm.write(f"跳过: {os.path.basename(src)} (已存在)")
-                    else:
-                        completed += 1
-                        pbar.set_postfix({"完成": completed, "跳过": skipped, "失败": failed})
-                        tqdm.write(f"✓ 完成: {os.path.basename(src)}")
+                    completed += 1
+                    pbar.set_postfix({"完成": completed, "失败": failed})
+                    tqdm.write(f"✓ 完成: {os.path.basename(src)}")
                 except Exception as exc:
                     failed += 1
-                    pbar.set_postfix({"完成": completed, "跳过": skipped, "失败": failed})
+                    pbar.set_postfix({"完成": completed, "失败": failed})
                     tqdm.write(f"✗ 错误: {os.path.basename(src)} - {exc}")
                 finally:
                     pbar.update(1)
     
-    # 打印总结
     print(f"\n处理完成!")
     print(f"总计: {len(json_files)} 个文件")
     print(f"完成: {completed} 个")
@@ -85,5 +90,5 @@ if __name__ == "__main__":
     else:
         input_dir = "/Volumes/mac_outstore/毕业/测试集文献"
         output_dir = os.path.join(input_dir, llm_engine)
-        max_workers = 4
+        max_workers = 1
         process_directory(input_dir, output_dir, max_workers=max_workers)
