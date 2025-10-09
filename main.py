@@ -91,7 +91,7 @@ if __name__ == "__main__":
             run_extraction_workflow(input_txt_path, output_json_path)
             print(f"抽取结果已保存到 {output_json_path}。")
     else:
-        input_dir = "/Volumes/mac_outstore/毕业/测试集文献"
+        input_dir = "/Volumes/mac_outstore/毕业/jsol文献/biomass_super_2000/filtered_json"
         output_dir = os.path.join(input_dir, llm_engine)
-        max_workers = 1
+        max_workers = 10
         process_directory(input_dir, output_dir, max_workers=max_workers)

@@ -15,6 +15,254 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def extract_ml_dataset(sample_name: str, data: Dict, doi: str) -> List[Dict]:
+    """
+    提取用于机器学习建模的数据集
+    每个比电容测试条件生成一行数据
+    
+    Args:
+        sample_name: 样品名称
+        data: 样品数据字典
+        doi: DOI标识
+    
+    Returns:
+        机器学习数据集列表,每个比电容条件一行
+    """
+    results = []
+    
+    if data is None:
+        return results
+    
+    try:
+        # 提取物理化学性质(这些会在多行中重复)
+        props = safe_get(data, 'PhysicochemicalProperties', default={})
+        
+        # 孔隙率数据
+        porosity = safe_get(props, 'Porosity', default={})
+        base_data = {
+            'doi': doi,
+            'sample_name': sample_name,
+            'BET_surface_area': safe_get(porosity, 'SpecificSurfaceArea_BET', 'value'),
+            'micropore_surface_area': safe_get(porosity, 'MicroporeSurfaceArea', 'value'),
+            'total_pore_volume': safe_get(porosity, 'TotalPoreVolume', 'value'),
+            'micropore_volume': safe_get(porosity, 'MicroporeVolume', 'value'),
+            'mesopore_volume': safe_get(porosity, 'MesoporeVolume', 'value'),
+            'avg_pore_diameter': safe_get(porosity, 'AveragePoreDiameter', 'value'),
+            'pore_size_distribution': safe_get(porosity, 'PoreSizeDistribution'),
+            'functional_groups': None,
+            'raman_ID_IG': None,
+            'element_C': None,
+            'element_N': None,
+            'element_O': None
+        }
+        
+        # 提取前驱体
+        synthesis = safe_get(data, 'Synthesis', default={})
+        components = safe_get(synthesis, 'Components', default={})
+        precursors = safe_get(components, 'Precursors', default=[])
+        if precursors and isinstance(precursors, list):
+            base_data['precursors'] = ', '.join(str(p) for p in precursors if p)
+        else:
+            base_data['precursors'] = None
+        
+        # 提取元素组成
+        composition = safe_get(props, 'Composition', default={})
+        elemental = safe_get(composition, 'Elemental', default={})
+        
+        if isinstance(elemental, dict):
+            for element in ['C', 'N', 'O']:
+                info = elemental.get(element)
+                if info:
+                    if isinstance(info, dict):
+                        base_data[f'element_{element}'] = safe_get(info, 'value')
+                    elif isinstance(info, (int, float)):
+                        base_data[f'element_{element}'] = info
+        
+        # 官能团
+        ftir_groups = safe_get(composition, 'QualitativeFunctionalGroups_FTIR', default=[])
+        if ftir_groups and isinstance(ftir_groups, list):
+            base_data['functional_groups'] = ', '.join(str(g) for g in ftir_groups if g)
+        
+        # 拉曼ID/IG
+        crystallinity = safe_get(props, 'Crystallinity', default={})
+        base_data['raman_ID_IG'] = safe_get(crystallinity, 'Graphitization_Raman_ID_IG')
+        
+        # 提取电化学性能数据
+        performance = safe_get(data, 'ElectrochemicalPerformance', default=[])
+        
+        if not isinstance(performance, list) or len(performance) == 0:
+            # 如果没有电化学数据,返回一行基础数据
+            results.append(base_data.copy())
+            return results
+        
+        # 遍历每个电化学测试
+        for test in performance:
+            if not isinstance(test, dict):
+                continue
+            
+            # 电化学基础信息
+            electrochemical_base = {
+                'system_type': safe_get(test, 'SystemType'),
+                'electrolyte': safe_get(test, 'Electrolyte'),
+                'voltage_window': safe_get(test, 'VoltageWindow'),
+                'rate_capability': safe_get(test, 'RateCapability'),
+                'cycle_stability': safe_get(test, 'CycleStability'),
+                'max_energy_density': safe_get(test, 'MaxEnergyDensity'),
+                'max_power_density': safe_get(test, 'MaxPowerDensity'),
+                'ESR': None,
+                'Rct': None
+            }
+            
+            # 阻抗数据
+            impedance = safe_get(test, 'Impedance', default={})
+            if isinstance(impedance, dict):
+                electrochemical_base['ESR'] = safe_get(impedance, 'ESR')
+                electrochemical_base['Rct'] = safe_get(impedance, 'Rct')
+            
+            # 提取比电容数据
+            capacitances = safe_get(test, 'SpecificCapacitance', default=[])
+            
+            if not capacitances or not isinstance(capacitances, list):
+                # 如果没有比电容数据,创建一行包含基础信息的数据
+                row_data = base_data.copy()
+                row_data.update(electrochemical_base)
+                row_data.update({
+                    'capacitance_method': None,
+                    'capacitance_value': None,
+                    'capacitance_unit': None,
+                    'capacitance_condition': None,
+                    'capacitance_mass_loading': None
+                })
+                results.append(row_data)
+            else:
+                # 为每个比电容测试条件创建一行
+                for cap in capacitances:
+                    if not isinstance(cap, dict):
+                        continue
+                    
+                    row_data = base_data.copy()
+                    row_data.update(electrochemical_base)
+                    row_data.update({
+                        'capacitance_method': safe_get(cap, 'method'),
+                        'capacitance_value': safe_get(cap, 'value'),
+                        'capacitance_unit': safe_get(cap, 'unit'),
+                        'capacitance_condition': safe_get(cap, 'condition'),
+                        'capacitance_mass_loading': safe_get(cap, 'mass_loading')
+                    })
+                    
+                    results.append(row_data)
+    
+    except Exception as e:
+        logger.warning(f"提取样品 {sample_name} 的机器学习数据集时出错: {e}")
+    
+    return results
+
+
+def batch_convert_json_to_ml_dataset(input_dir: str, output_dir: str = None):
+    """
+    批量转换JSON文件为机器学习建模数据集
+    
+    Args:
+        input_dir: 输入目录路径
+        output_dir: 输出目录路径,默认为输入目录下的 'csv_output' 文件夹
+    
+    Returns:
+        DataFrame: 机器学习数据集
+    """
+    input_path = Path(input_dir)
+    
+    # 设置输出目录
+    if output_dir is None or output_dir == "":
+        output_path = input_path / 'csv_output'
+    else:
+        output_path = Path(output_dir)
+    
+    output_path.mkdir(parents=True, exist_ok=True)
+    
+    # 查找所有JSON文件
+    json_files = list(input_path.glob('*_extracted.json'))
+    
+    if not json_files:
+        logger.warning(f"在 {input_dir} 中未找到 *_extracted.json 文件")
+        return None
+    
+    logger.info(f"找到 {len(json_files)} 个JSON文件,开始转换为机器学习数据集...")
+    
+    # 用于存储所有数据
+    all_ml_data = []
+    
+    # 统计信息
+    success_count = 0
+    failed_count = 0
+    
+    # 使用tqdm显示进度
+    for json_file in tqdm(json_files, desc="ML数据集转换", unit="文件"):
+        try:
+            # 读取JSON文件
+            with open(json_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            
+            # 获取DOI
+            filename = json_file.name
+            doi = filename_to_doi(filename)
+            
+            # 提取final_result
+            final_result = safe_get(data, 'final_result', default={})
+            
+            if not final_result or not isinstance(final_result, dict):
+                logger.warning(f"{filename}: final_result为空或格式不正确")
+                failed_count += 1
+                continue
+            
+            # 处理每个样品
+            for sample_name, sample_data in final_result.items():
+                if sample_data is None:
+                    continue
+                
+                ml_rows = extract_ml_dataset(sample_name, sample_data, doi)
+                all_ml_data.extend(ml_rows)
+            
+            success_count += 1
+        
+        except Exception as e:
+            logger.error(f"处理文件 {json_file.name} 时出错: {e}")
+            failed_count += 1
+            continue
+    
+    # 创建DataFrame
+    if all_ml_data:
+        df_ml = pd.DataFrame(all_ml_data)
+        
+        # 保存为CSV
+        output_file = output_path / 'ml_modeling_dataset.csv'
+        df_ml.to_csv(output_file, index=False, encoding='utf-8-sig')
+        
+        logger.info(f"\n{'='*60}")
+        logger.info(f"机器学习数据集转换完成!")
+        logger.info(f"{'='*60}")
+        logger.info(f"输出目录: {output_path}")
+        logger.info(f"\n统计信息:")
+        logger.info(f"  成功处理: {success_count} 个文件")
+        logger.info(f"  失败: {failed_count} 个文件")
+        logger.info(f"\n数据集统计:")
+        logger.info(f"  总行数: {len(df_ml)}")
+        logger.info(f"  总列数: {len(df_ml.columns)}")
+        logger.info(f"  唯一样品数: {df_ml['sample_name'].nunique()}")
+        logger.info(f"\n输出文件:")
+        logger.info(f"  ✓ ml_modeling_dataset.csv")
+        logger.info(f"{'='*60}\n")
+        
+        # 显示列名
+        logger.info("\n数据集列名:")
+        for i, col in enumerate(df_ml.columns, 1):
+            logger.info(f"  {i}. {col}")
+        
+        return df_ml
+    else:
+        logger.warning("没有成功提取任何机器学习数据")
+        return None
+
+
 def safe_get(data: Any, *keys, default=None):
     """
     安全地从嵌套字典中获取值
@@ -468,20 +716,32 @@ def batch_convert_json_to_csv(input_dir: str, output_dir: str = None):
 
 
 if __name__ == "__main__":
-    # 批量处理示例
-    input_directory = "/Volumes/mac_outstore/毕业/测试集文献/zhipu"
-    output_directory = ""  # 空字符串表示使用默认目录
+    # # 批量处理示例
+    # input_directory = "/Volumes/mac_outstore/毕业/jsol文献/biomass_super_2000/filtered_json/zhipu"
+    # output_directory = ""  # 空字符串表示使用默认目录
     
-    # 批量转换
-    df_syn, df_phys, df_elec, df_merged = batch_convert_json_to_csv(
-        input_directory, 
-        output_directory
-    )
+    # # 批量转换
+    # df_syn, df_phys, df_elec, df_merged = batch_convert_json_to_csv(
+    #     input_directory, 
+    #     output_directory
+    # )
     
-    # 显示部分数据
-    if df_syn is not None and not df_syn.empty:
-        print("\n合成数据预览:")
-        print(df_syn.head())
+    # # 显示部分数据
+    # if df_syn is not None and not df_syn.empty:
+    #     print("\n合成数据预览:")
+    #     print(df_syn.head())
         
-        print("\nDOI列示例:")
-        print(df_syn[['doi', 'sample_name']].head(10))
+    #     print("\nDOI列示例:")
+    #     print(df_syn[['doi', 'sample_name']].head(10))
+    # 生成机器学习数据集
+    input_directory = "/Volumes/mac_outstore/毕业/jsol文献/biomass_super_2000/filtered_json/zhipu"
+    
+    # 生成ML数据集
+    df_ml = batch_convert_json_to_ml_dataset(input_directory)
+    
+    if df_ml is not None:
+        print("\n机器学习数据集预览:")
+        print(df_ml.head(10))
+        
+        print("\n数据集信息:")
+        print(df_ml.info())
