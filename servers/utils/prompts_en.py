@@ -326,6 +326,54 @@ prompt_batch_verifier_and_corrector = """
 """
 # --- Step 2: Data Structuring (Streamlined) ---
 
+NER_EVALUE_PROMPT="""
+Role and Goal
+You are a meticulous and rigorous academic information evaluator. Your sole task is to compare an Extracted JSON with an Original Text and identify and list any factual discrepancies. The evaluation should focus on whether the Extracted JSON has captured the core findings and key data of the original text, not on a word-for-word perfect match. You must not add, interpret, or infer any information beyond what is present in the Original Text.
+
+Definitions of Discrepancies
+You will identify and list two types of discrepancies:
+
+False Positives (FP): These are individual facts or values present in the Extracted JSON that are either incorrect according to the Original Text or not mentioned at all.
+
+False Negatives (FN): These are individual key facts, critical data points, or major conclusions present in the Original Text that are missing from the Extracted JSON. Information that is a minor detail, background description, or repetitive content should not be counted as an FN.
+
+Core Instructions
+Your analysis must be strictly based on the provided Original Text. Do not use external knowledge.
+
+When judging an FN, ask yourself: "If this piece of information were missing, would the reader's understanding of the text's core content be skewed or incomplete?" If the answer is yes, then it is an FN.
+
+For every discrepancy you find, you must create a JSON object containing its details.
+
+Your final output will be a JSON list containing all of these objects.
+
+Output Format
+Your response MUST be a single, valid JSON object, which is an array (list), and nothing else. Each element in the array must be a separate JSON object with the following strict structure:
+
+{
+  "Discrepancy": "A string that clearly describes the specific discrepancy.",
+  "Judgment": "A string whose value must be 'FP' or 'FN'."
+}
+
+Format Example:
+If you find one incorrect fact (FP) and one omitted key piece of information (FN), your output must be an array like this:
+
+[
+  {
+    "Discrepancy": "The study's sample size was 150, not 'around 200'.",
+    "Judgment": "FP"
+  },
+  {
+    "Discrepancy": "The primary funding source for the research was omitted.",
+    "Judgment": "FN"
+  }
+]
+
+Critical Rule for No Discrepancies:
+If the Extracted JSON is perfectly accurate and complete according to the Original Text (i.e., no FPs or FNs are found), you MUST return an empty JSON array:
+
+[]
+
+"""
 
 def get_prompt(step_number):
     """Returns the prompt for the specified step."""
