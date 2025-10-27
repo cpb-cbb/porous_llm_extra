@@ -1,0 +1,2134 @@
+[
+    {
+        "file_name": "10.1016j.apsusc.2018.07.197.json",
+        "metrics": {
+            "TP": 71,
+            "FP": 2,
+            "FN": 1,
+            "precision": 0.9726,
+            "recall": 0.9861,
+            "f1_score": 0.9793
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Absorption Peak",
+                "Incorrect_Value": "655 nm",
+                "Judgment": "FP",
+                "Reason": "原文指出，655 nm 的吸收峰是 MoS2/并五苯异质结的特征，而不是单独的单层 MoS2 的特征。"
+            },
+            {
+                "Missing_Field": "Performance Comparison for Al-device",
+                "Judgment": "FN",
+                "Reason": "提取的 JSON 指出 Al-device 的性能优于基于并五苯的肖特基光电二极管以及基于 MoS2 的光电二极管，但遗漏了原文中提到的关键信息，即其性能也“超过了最近报道的大多数有机光电二极管”。"
+            },
+            {
+                "Incorrect_Field": "Specific Detectivity (D*)",
+                "Incorrect_Value": "1.55 × 10¹³ Jones at Vd = -15 V and Pint = 28.18 mW/cm²",
+                "Judgment": "FP",
+                "Reason": "原文指出，Au-device 的 D* 是在光强度为 0.015 mW/cm² 下测量的，而不是 JSON 中所述的 28.18 mW/cm²（后者是用于测量 PDR 的光强度）。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1021acs.nanolett.1c02074.json",
+        "metrics": {
+            "TP": 33,
+            "FP": 2,
+            "FN": 2,
+            "precision": 0.9429,
+            "recall": 0.9429,
+            "f1_score": 0.9429
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Power dependence of two-photon emission",
+                "Incorrect_Value": "Slope of 3.7 at low fluences, increases to 2 at higher fluences",
+                "Judgment": "FP",
+                "Reason": "原始文本指出，斜率从低泵浦通量下的 3.7 *变化*（或减小）到较高泵浦通量下的 2，而不是增加到 2。"
+            },
+            {
+                "Incorrect_Field": "Full wave half-maximum (fwhm) for four-photon emission",
+                "Incorrect_Value": "Decreased compared to two- and three-photon cases",
+                "Judgment": "FP",
+                "Reason": "原始文本指出，通过降低折射率对比度，fwhm *可以*被减小，这是一个假设性的改进，而不是一个被观察到的结果。"
+            },
+            {
+                "Missing_Field": "Quantitative comparison of one-photon and two-photon emission intensities",
+                "Judgment": "FN",
+                "Reason": "文本提供了关键的量化数据点，表明双光子发射强度从在低泵浦通量下约为单光子发射强度的 1/60 增加到在 79 μJ/cm² 下约为 60%，这对于展示其变得“可比较”的核心发现至关重要。"
+            },
+            {
+                "Missing_Field": "Mechanism of absorption length transformation",
+                "Judgment": "FN",
+                "Reason": "文本解释了一个核心机制，即共振将吸收长度从薄膜厚度转变为波导模式中的传播长度，这是增强效果的关键部分，但在 JSON 中被遗漏了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1016j.mssp.2018.01.024.json",
+        "metrics": {
+            "TP": 154,
+            "FP": 6,
+            "FN": 10,
+            "precision": 0.9625,
+            "recall": 0.939,
+            "f1_score": 0.9506
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "physical_form",
+                "Incorrect_Value": "Square lattice of cylindrical pillars",
+                "Judgment": "FP",
+                "Reason": "原始文本描述了SiO2光子晶体结构，并提到了孔径，表明这是一个孔洞阵列，而不是圆柱形支柱阵列。"
+            },
+            {
+                "Incorrect_Field": "Forward Voltage at 1 mA",
+                "Incorrect_Value": "2.75 V",
+                "Judgment": "FP",
+                "Reason": "原始文本没有提供带有SiO2光子晶体的紫外LED在1mA注入电流下的正向电压值。"
+            },
+            {
+                "Incorrect_Field": "Forward Voltage at 1 mA",
+                "Incorrect_Value": "2.33 V",
+                "Judgment": "FP",
+                "Reason": "原始文本没有提供带有SiO2光子晶体的蓝色LED在1mA注入电流下的正向电压值。"
+            },
+            {
+                "Incorrect_Field": "Forward Voltage at 1 mA",
+                "Incorrect_Value": "1.85 V",
+                "Judgment": "FP",
+                "Reason": "原始文本没有提供带有SiO2光子晶体的绿色LED在1mA注入电流下的正向电压值。"
+            },
+            {
+                "Incorrect_Field": "Peak Wavelength Movement at 1 mA",
+                "Incorrect_Value": "11.3 nm blueshift",
+                "Judgment": "FP",
+                "Reason": "原始文本指出，11.3 nm的蓝移是当注入电流从1mA变化到20mA时发生的，而不是在1mA时发生的移动。"
+            },
+            {
+                "Incorrect_Field": "Peak Wavelength Movement at 20 mA",
+                "Incorrect_Value": "11.3 nm blueshift",
+                "Judgment": "FP",
+                "Reason": "原始文本指出，11.3 nm的蓝移是当注入电流从1mA变化到20mA时发生的，而不是在20mA时发生的移动。"
+            },
+            {
+                "Missing_Field": "Forward Voltage Reduction",
+                "Judgment": "FN",
+                "Reason": "原始文本明确指出，由于引入了SiO2光子晶体，紫外、蓝色和绿色LED在20mA时的正向电压分别降低了0.19 V、0.15 V和0.14 V，这是一个关键的电学性能改善结果，但在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "Mechanisms of LOP Enhancement",
+                "Judgment": "FN",
+                "Reason": "原始文本详细解释了光输出功率增强的三个主要机制（光子带隙、布拉格衍射和漫散射），这是理解核心发现的关键解释，但在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "Consistency between Simulation and Experiment",
+                "Judgment": "FN",
+                "Reason": "原始文本明确指出“实验观察与三维FDTD仿真结果的趋势定性一致”，这是连接模拟和实验结果的重要结论，但在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "Peak Wavelength Movement of Blue LEDs",
+                "Judgment": "FN",
+                "Reason": "原始文本提供了蓝色LED的峰值波长在1mA到20mA电流范围内有2.0 nm蓝移的具体数据，这是一个关键的性能表征，但在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "Peak Wavelength Stability of UV LEDs",
+                "Judgment": "FN",
+                "Reason": "原始文本指出紫外LED的峰值波长在各种注入电流下“非常稳定”，这是一个重要的观察结果，但在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "Funding Sources",
+                "Judgment": "FN",
+                "Reason": "原始文本在“致谢”部分列出了多项资助来源（如国家自然科学基金、广东省科技计划项目等），这是研究背景的重要信息，但在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "Chip Size",
+                "Judgment": "FN",
+                "Reason": "原始文本在实验部分提到LED芯片的尺寸被定义为250 µm × 575 µm，这是一个关键的实验参数，但在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "FDTD Simulation Model Parameters",
+                "Judgment": "FN",
+                "Reason": "原始文本详细描述了FDTD仿真模型的各项参数（如各层厚度、网格大小、边界条件等），这些是理解和复现仿真的关键信息，但在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "Reason for Lower Voltage in Green LEDs",
+                "Judgment": "FN",
+                "Reason": "原始文本解释了绿色LED电压较低的原因是MQW有源区中更高的铟含量，这是一个重要的解释性结论，但在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "Reason for Voltage Reduction with PhCs",
+                "Judgment": "FN",
+                "Reason": "原始文本解释了引入SiO2光子晶体后电压降低的原因是CF4等离子体改善了ITO层的电流扩展能力，这是一个关键的机理解释，但在提取内容中被忽略了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.10631.3179413.json",
+        "metrics": {
+            "TP": 32,
+            "FP": 1,
+            "FN": 4,
+            "precision": 0.9697,
+            "recall": 0.8889,
+            "f1_score": 0.9275
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "components[2].material_name",
+                "Incorrect_Value": "Silicon Oxynitride",
+                "Judgment": "FP",
+                "Reason": "原文将材料称为 'Si-rich SiOx' 或 'SiOx'，这是一种硅的氧化物，而不是硅的氮氧化物。"
+            },
+            {
+                "Missing_Field": "Fabrication Method",
+                "Judgment": "FN",
+                "Reason": "文本描述了详细的制造过程，包括使用 PECVD、气体流量比、退火温度和持续时间，这些是关键信息，但 JSON 中缺失。"
+            },
+            {
+                "Missing_Field": "Pump Source",
+                "Judgment": "FN",
+                "Reason": "文本指明 ASE 测量使用 40 mW 的 325 nm He-Cd 激光器进行顶部泵浦，这是一个关键的实验参数，但在 JSON 中缺失。"
+            },
+            {
+                "Missing_Field": "Probe Signal for Small-Signal Gain",
+                "Judgment": "FN",
+                "Reason": "文本提到小信号增益测量使用 785 nm 激光二极管探测信号通过 1.5 cm 长的波导，这是理解该特定结果背景的关键信息，但在 JSON 中缺失。"
+            },
+            {
+                "Missing_Field": "Comparison with Previous Work",
+                "Judgment": "FN",
+                "Reason": "文本将测得的增益和损耗系数（65 cm⁻¹ 增益，5 cm⁻¹ 损耗）与先前的研究进行比较，以突显其更低的损耗，这是一个关键的背景信息，但在 JSON 中缺失。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1002pola.28278.json",
+        "metrics": {
+            "TP": 88,
+            "FP": 7,
+            "FN": 8,
+            "precision": 0.9263,
+            "recall": 0.9167,
+            "f1_score": 0.9215
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Curing Temperature",
+                "Incorrect_Value": "180°C, 191°C (two endothermic peaks)",
+                "Judgment": "FP",
+                "Reason": "原文指出180°C和191°C是熔融峰，而不是固化温度。固化放热峰在244°C。"
+            },
+            {
+                "Incorrect_Field": "New Peaks",
+                "Incorrect_Value": "Around 1010 cm⁻¹",
+                "Judgment": "FP",
+                "Reason": "原文指出1010 cm⁻¹附近的峰出现在BCBP聚合物中，而不是预聚物中。"
+            },
+            {
+                "Incorrect_Field": "New Peaks",
+                "Incorrect_Value": "Around 1010 cm⁻¹",
+                "Judgment": "FP",
+                "Reason": "原文指出1010 cm⁻¹附近的峰出现在BCBP聚合物中，而不是预聚物中。"
+            },
+            {
+                "Incorrect_Field": "Weight Retention at 500°C in N2",
+                "Incorrect_Value": "95%",
+                "Judgment": "FP",
+                "Reason": "原文指出，对于含5 wt% APPH的聚合物，其5%失重温度（T5%）为521°C，这意味着在500°C时的重量保持率高于95%。"
+            },
+            {
+                "Incorrect_Field": "Limiting Oxygen Index (LOI)",
+                "Incorrect_Value": "Calculated as 45.9",
+                "Judgment": "FP",
+                "Reason": "原文指出LOI值45.9是基于含10 wt% APPH的聚合物计算得出的，而不是含5 wt%的聚合物。"
+            },
+            {
+                "Incorrect_Field": "Weight Retention at 500°C in N2",
+                "Incorrect_Value": "95%",
+                "Judgment": "FP",
+                "Reason": "原文指出，对于含10 wt% APPH的聚合物，其5%失重温度（T5%）为538°C，这意味着在500°C时的重量保持率显著高于95%。"
+            },
+            {
+                "Incorrect_Field": "Char Yield at 1000°C",
+                "Incorrect_Value": "~70%",
+                "Judgment": "FP",
+                "Reason": "原文指出，在空气气氛下，含10 wt% APPH的聚合物在1000°C的残炭率为0%。"
+            },
+            {
+                "Missing_Field": "BHBP synthesis yield",
+                "Judgment": "FN",
+                "Reason": "原文指出中间体BHBP的产率为80%，这是一个关键的实验数据，但在提取内容中被遗漏了。"
+            },
+            {
+                "Missing_Field": "BCBP synthesis yield",
+                "Judgment": "FN",
+                "Reason": "原文指出单体BCBP的产率为59%，这是一个关键的实验数据，但在提取内容中被遗漏了。"
+            },
+            {
+                "Missing_Field": "BCBP monomer melting point at 180°C",
+                "Judgment": "FN",
+                "Reason": "原文指出BCBP单体在180°C和191°C有两个熔融峰，但提取内容中只包含了191°C，遗漏了另一个关键熔点。"
+            },
+            {
+                "Missing_Field": "Polymer curing procedure",
+                "Judgment": "FN",
+                "Reason": "原文详细描述了聚合物的固化加热程序（220°C/2h至380°C/4h），这是制备聚合物的关键步骤，但在提取内容中被遗漏了。"
+            },
+            {
+                "Missing_Field": "Conclusion on polymerization mechanism and structure",
+                "Judgment": "FN",
+                "Reason": "原文结论部分指出BCBP单体主要形成了异吲哚啉和酞菁结构，这是关于聚合物核心结构的重要发现，但在提取内容中被遗漏了。"
+            },
+            {
+                "Missing_Field": "Basis for LOI calculation",
+                "Judgment": "FN",
+                "Reason": "原文提到LOI值是根据含10 wt% APPH的聚合物在氮气下的残炭率计算的，但这一重要信息在提取内容中被遗漏了。"
+            },
+            {
+                "Missing_Field": "Comparative thermal properties",
+                "Judgment": "FN",
+                "Reason": "原文将BCBP聚合物的热性能与多种其他聚合物（如BAPh, PAEK-CN等）进行了比较，这是评估其性能优势的关键结论，但在提取内容中被遗漏了。"
+            },
+            {
+                "Missing_Field": "Primary Funding Source",
+                "Judgment": "FN",
+                "Reason": "文本在致谢部分提到了研究的主要资金来源是国家自然科学基金，这在提取内容中被忽略了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1016j.sna.2013.04.011.json",
+        "metrics": {
+            "TP": 59,
+            "FP": 1,
+            "FN": 5,
+            "precision": 0.9833,
+            "recall": 0.9219,
+            "f1_score": 0.9516
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Resonant Frequency Variation with Attached Mass",
+                "Incorrect_Value": "Higher than defect-free SWBNNT",
+                "Judgment": "FP",
+                "Reason": "原文指出，当缺陷靠近固定端时，有缺陷纳米管的谐振频率低于无缺陷纳米管，只有当缺陷移向自由端时才会变得更高。该陈述并非普遍成立。"
+            },
+            {
+                "Missing_Field": "有限元模型梁单元参数",
+                "Judgment": "FN",
+                "Reason": "文本在表1中提供了原子尺度有限元模型中梁单元的具体属性（长度、杨氏模量、泊松比、直径），但这些关键参数在提取的JSON中缺失了。"
+            },
+            {
+                "Missing_Field": "原子核质量",
+                "Judgment": "FN",
+                "Reason": "文本指明了硼和氮原子核的质量，这些质量被用作有限元模型中的点质量，但此信息在JSON中被遗漏了。"
+            },
+            {
+                "Missing_Field": "附加质量范围",
+                "Judgment": "FN",
+                "Reason": "文本明确说明了模拟中使用的附加质量范围（10^-19 kg 至 10^-26 kg），但JSON只提到了质量灵敏度限，遗漏了所研究范围这一关键细节。"
+            },
+            {
+                "Missing_Field": "VB与VN缺陷频率差异的纵横比依赖性",
+                "Judgment": "FN",
+                "Reason": "文本描述了在纳米管中间部分，VB和VN缺陷之间的频率差异关系如何随纳米管纵横比的变化而反转，这个关键发现在JSON中缺失了。"
+            },
+            {
+                "Missing_Field": "靠近自由端的负频移",
+                "Judgment": "FN",
+                "Reason": "文本提到一个关键发现，即当缺陷位于靠近自由端（90%位置）时，谐振频移变为负值，但此信息在JSON中被遗漏了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1002mop.32118.json",
+        "metrics": {
+            "TP": 54,
+            "FP": 0,
+            "FN": 4,
+            "precision": 1.0,
+            "recall": 0.931,
+            "f1_score": 0.9643
+        },
+        "verification_details": [
+            {
+                "Missing_Field": "Novelty Claim / First Demonstration",
+                "Judgment": "FN",
+                "Reason": "文本明确声明这是首次使用 Sm2O3 薄膜在 EDFL 中产生 Q 开关脉冲，这是论文的一个关键结论，但在提取内容中缺失了。"
+            },
+            {
+                "Missing_Field": "Pump Power for Maximum Performance",
+                "Judgment": "FN",
+                "Reason": "文本指出，最大脉冲能量（26 nJ）和最小脉冲宽度（5.6 μs）是在 88.1 mW 的泵功率下获得的。这一关键操作参数在提取内容中缺失了。"
+            },
+            {
+                "Missing_Field": "Funding Information",
+                "Judgment": "FN",
+                "Reason": "原始文本列出了两个具体的资助来源和赠款编号（RF018B-2018 和 INTI-FITS-01-06-2018），这是研究背景的关键信息，但在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "Performance Comparison with Other SAs",
+                "Judgment": "FN",
+                "Reason": "文本包含一个详细的表格（表 1），将 Sm2O3 SA 的性能与其他材料进行比较，以支持其可比性的结论。这个关键比较在提取内容中缺失了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1103PhysRevLett.126.167401.json",
+        "metrics": {
+            "TP": 28,
+            "FP": 1,
+            "FN": 3,
+            "precision": 0.9655,
+            "recall": 0.9032,
+            "f1_score": 0.9333
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Saturation Effect",
+                "Incorrect_Value": "Large at high pulse energies (W > 460 pJ)",
+                "Judgment": "FP",
+                "Reason": "原文指出饱和效应在高脉冲能量（W）下很大，但并未指明 W > 460 pJ 的具体阈值。JSON 添加了此具体条件。"
+            },
+            {
+                "Missing_Field": "Enhancement factor over hydrogenic theory for gs",
+                "Judgment": "FN",
+                "Reason": "文本陈述了关键发现，即饱和常数 `˜gs(0)` 以一个大的因子（7 ± 2）超过了类氢激子理论，但此量化比较在 JSON 中缺失了。"
+            },
+            {
+                "Missing_Field": "Spin anisotropy of exciton-exciton interaction",
+                "Judgment": "FN",
+                "Reason": "文本报告了一个主要发现，即自旋相反激子之间的相互作用常数（`gx,⊥`）大约是自旋平行激子之间（`gx,∥`）的两倍且为正值，这是一个关键结论，但在 JSON 中缺失了。"
+            },
+            {
+                "Missing_Field": "Funding sources",
+                "Judgment": "FN",
+                "Reason": "文本在致谢部分列出了几个资金来源（例如，ANR、NSF、ERC），但此信息完全从提取的 JSON 中忽略了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1016j.msea.2018.08.005.json",
+        "metrics": {
+            "TP": 105,
+            "FP": 6,
+            "FN": 7,
+            "precision": 0.9459,
+            "recall": 0.9375,
+            "f1_score": 0.9417
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Pore size in bundles",
+                "Incorrect_Value": "Ca. 100 μm",
+                "Judgment": "FP",
+                "Reason": "原始文本未提供任何复合材料束内孔隙大小的具体值。"
+            },
+            {
+                "Incorrect_Field": "Crack propagation mode at high temperature",
+                "Incorrect_Value": "Second cracks propagation mode: \"matrix extension\"",
+                "Judgment": "FP",
+                "Reason": "原始文本明确指出，这种“基体扩展”的裂纹扩展模式在Cf/SiC复合材料中不存在。"
+            },
+            {
+                "Incorrect_Field": "Crack deflection behavior at room temperature",
+                "Incorrect_Value": "Multiple deflection of cracks in SiC matrix",
+                "Judgment": "FP",
+                "Reason": "原始文本将SiC基体中的多重裂纹偏转归因于Cf/SiC-SiCnw复合材料（图6），而非Cf/SiC-SiCnw/PyC复合材料。"
+            },
+            {
+                "Incorrect_Field": "Pull-out of SiC nanowires at room temperature",
+                "Incorrect_Value": "Partially covered by nanowires",
+                "Judgment": "FP",
+                "Reason": "原始文本指出，Cf/SiC-SiCnw/PyC复合材料断裂表面的基体区域“完全被纳米线覆盖”。"
+            },
+            {
+                "Incorrect_Field": "SiC nanowire size distribution",
+                "Incorrect_Value": "Two sizes of SiC nanowires: one with short rod shapes, relatively small length-diameter ratio, and large deposition density; another with coarse-like structures of about 5 μm",
+                "Judgment": "FP",
+                "Reason": "根据原文，此描述适用于Cf/SiC-SiCnw复合材料（图9h），而不是Cf/SiC-SiCnw/PyC复合材料。"
+            },
+            {
+                "Incorrect_Field": "Crack propagation mode at high temperature",
+                "Incorrect_Value": "Second cracks propagation mode: \"matrix extension\"",
+                "Judgment": "FP",
+                "Reason": "原始文本在室温（第3.2.2节）而非高温（第3.3.3节）的背景下描述了“基体扩展”模式。"
+            },
+            {
+                "Missing_Field": "Conclusion on performance improvement",
+                "Judgment": "FN",
+                "Reason": "文本指出，SiC纳米线显著提高了Cf/SiC的强度和断裂韧性，这是研究的核心发现，但在提取内容中缺失。"
+            },
+            {
+                "Missing_Field": "Mechanism of property improvement",
+                "Judgment": "FN",
+                "Reason": "文本总结，性能改善主要归因于SiC纳米线对裂纹的偏转和桥接，以及纳米线从基体中的拔出和断裂，这一核心机理未被提取。"
+            },
+            {
+                "Missing_Field": "Mechanism of high-temperature improvement",
+                "Judgment": "FN",
+                "Reason": "文本解释了高温下改善的机理：SiC纳米线的热膨胀系数大于基体，导致其在高温下处于受压状态，拔出时需要更多能量，此关键信息被遗漏。"
+            },
+            {
+                "Missing_Field": "Percentage increase in high-temperature properties",
+                "Judgment": "FN",
+                "Reason": "文本提到，与常规Cf/SiC相比，添加SiC纳米线的复合材料在1000°C下的弯曲强度和断裂韧性分别高出13.2%和16.1%，这是重要的量化对比结果，但未被提取。"
+            },
+            {
+                "Missing_Field": "Fabrication method",
+                "Judgment": "FN",
+                "Reason": "文本明确说明所有三种复合材料均通过化学气相渗透（CVI）方法制备，这是理解材料制备的关键背景信息，但被忽略了。"
+            },
+            {
+                "Missing_Field": "Nanowire growth method",
+                "Judgment": "FN",
+                "Reason": "文本提到采用催化法在Cf/SiC复合材料的基体中原位生长SiC纳米线，这是实验方法的关键部分，但未被提取。"
+            },
+            {
+                "Missing_Field": "Funding sources",
+                "Judgment": "FN",
+                "Reason": "文本的致谢部分列出了多个资助来源（如中国国家自然科学基金），这是学术论文的重要信息，但在提取内容中被忽略。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1016j.sse.2007.09.022.json",
+        "metrics": {
+            "TP": 27,
+            "FP": 1,
+            "FN": 6,
+            "precision": 0.9643,
+            "recall": 0.8182,
+            "f1_score": 0.8852
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Switching loss",
+                "Incorrect_Value": "W",
+                "Judgment": "FP",
+                "Reason": "原始文本明确指出开关损耗的单位是 W/mm，例如 'The switching loss is increased from 0.861 to 1.11 W/mm'。提取的 JSON 错误地将其单位列为 'W'。"
+            },
+            {
+                "Missing_Field": "Gate length",
+                "Judgment": "FN",
+                "Reason": "原始文本中提到了晶体管的一个基本物理参数，即栅极长度为 0.5 µm，但在提取的 JSON 中缺失了这一信息。"
+            },
+            {
+                "Missing_Field": "Key advantage of the simulation technique",
+                "Judgment": "FN",
+                "Reason": "原文明确指出了该仿真技术的一个核心优势，即 'we need no matching and other lumped element networks for studying the large signal behavior'，这一关键发现在提取的 JSON 中被遗漏。"
+            },
+            {
+                "Missing_Field": "Conclusion on optimal frequency range",
+                "Judgment": "FN",
+                "Reason": "原文得出了一个关于器件性能的重要结论：'the device has best Class-C behavior at low frequencies up to 1 GHz'，这一主要结论在提取的 JSON 中未被包含。"
+            },
+            {
+                "Missing_Field": "Comparison with Raab's theory",
+                "Judgment": "FN",
+                "Reason": "原文将其结果与 Frederick H. Raab 的分析进行了对比，指出其结果与 'maximum achievable eﬃciency depends not upon the class of operation, but upon the number of harmonics employed' 的理论相悖。这一重要的背景和对比信息在提取的 JSON 中缺失。"
+            },
+            {
+                "Missing_Field": "Complete switching loss data at different voltages",
+                "Judgment": "FN",
+                "Reason": "对于2 GHz和3 GHz，原文提供了在不同漏极电压下的两个开关损耗值（例如，在2 GHz时为0.861 W/mm和1.11 W/mm）。提取的JSON只包含了一部分数据（如2 GHz的0.861 W/mm和3 GHz的1.52 W/mm），遗漏了在更高漏极电压下的损耗值（2 GHz的1.11 W/mm和3 GHz的1.16 W/mm），因此未能完整反映开关损耗随电压增加而增加的关键发现。"
+            },
+            {
+                "Missing_Field": "Source of the transistor structure",
+                "Judgment": "FN",
+                "Reason": "原文在致谢部分提到晶体管结构由瑞典国防研究局（FOI）提供，这是关于研究材料来源和合作背景的关键信息，但在提取的 JSON 中被忽略了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.110950.774253.json",
+        "metrics": {
+            "TP": 80,
+            "FP": 1,
+            "FN": 6,
+            "precision": 0.9877,
+            "recall": 0.9302,
+            "f1_score": 0.9581
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Total waveguide length",
+                "Incorrect_Value": "About two-thirds that of the proposed system",
+                "Judgment": "FP",
+                "Reason": "原文指出，所提出的8x8开关的总波导长度（290 mm）是传统单MZI交叉矩阵开关的三分之二。这意味着传统开关的长度是新型开关的1.5倍，而不是三分之二。"
+            },
+            {
+                "Missing_Field": "Switching time",
+                "Judgment": "FN",
+                "Reason": "文本提到开关时间约为2毫秒，这是评估该技术在光通信系统中适用性的一个关键性能指标，此信息在提取内容中被遗漏。"
+            },
+            {
+                "Missing_Field": "Fabrication process details (FHD and RIE)",
+                "Judgment": "FN",
+                "Reason": "文本指出器件是使用火焰水解沉积（FHD）和反应离子蚀刻（RIE）的组合制造的，这些是制造工艺中的关键细节，但在提取内容中缺失。"
+            },
+            {
+                "Missing_Field": "EDFA gain band range (1530-1560 nm)",
+                "Judgment": "FN",
+                "Reason": "文本明确指出了工作波长带宽覆盖了1530-1560 nm范围，这是一个关键的具体数据点，而不仅仅是泛指的“EDFA增益频带”。"
+            },
+            {
+                "Missing_Field": "System requirement for extinction ratio",
+                "Judgment": "FN",
+                "Reason": "文本提到，对于1 dB的系统代价，需要超过35 dB的消光比。这个系统级要求为器件的高消光比结果提供了重要的背景，但它被遗漏了。"
+            },
+            {
+                "Missing_Field": "Commercial availability of reference switch",
+                "Judgment": "FN",
+                "Reason": "文本指出，具有约30 dB消光比和约7 dB插入损耗的8x8矩阵开关已经商用。这个背景信息对于理解研究的创新性和市场相关性很重要，但在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "Estimated MXR range and average value",
+                "Judgment": "FN",
+                "Reason": "文本提供了估计的MXR范围（-43.3到-48.4 dB）和平均值（-46.0 dB），这些是描述串扰性能的关键数据，但提取内容中只包含了最差情况值。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1016j.sse.2013.10.004.json",
+        "metrics": {
+            "TP": 102,
+            "FP": 4,
+            "FN": 4,
+            "precision": 0.9623,
+            "recall": 0.9623,
+            "f1_score": 0.9623
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Drain current (ID) at 300K",
+                "Incorrect_Value": "470 mA/mm",
+                "Judgment": "FP",
+                "Reason": "原文指出，InP pHEMT 在 300 K 下的最大漏电流为 630 mA/mm，而不是 470 mA/mm。"
+            },
+            {
+                "Incorrect_Field": "Drain current (ID) at 10K",
+                "Incorrect_Value": "510 mA/mm",
+                "Judgment": "FP",
+                "Reason": "原文指出，InP pHEMT 在 10 K 下的最大漏电流为 890 mA/mm，而不是 510 mA/mm。"
+            },
+            {
+                "Incorrect_Field": "Drain current (ID) at 300K",
+                "Incorrect_Value": "510 mA/mm",
+                "Judgment": "FP",
+                "Reason": "原文指出，GaAs mHEMT 在 300 K 下的最大漏电流为 470 mA/mm，而不是 510 mA/mm。"
+            },
+            {
+                "Incorrect_Field": "measurement_method",
+                "Incorrect_Value": "Hall measurement",
+                "Judgment": "FP",
+                "Reason": "原文提供了 300 K 下的载流子密度和迁移率值，但没有明确说明测量方法为霍尔效应测量。"
+            },
+            {
+                "Missing_Field": "Publication metadata",
+                "Judgment": "FN",
+                "Reason": "文本包含关键信息，如作者、所属机构、期刊名称、卷、年份、页码和 DOI，这些在提取的 JSON 中被忽略了。"
+            },
+            {
+                "Missing_Field": "Funding sources",
+                "Judgment": "FN",
+                "Reason": "在致谢部分，文本列出了多个主要资金来源，包括 VINNOVA 和几家公司/机构，但此信息在提取内容中缺失。"
+            },
+            {
+                "Missing_Field": "Epitaxial structure provider",
+                "Judgment": "FN",
+                "Reason": "文本指出外延结构由 Intelliepi 生长，这是关于材料来源的一个关键细节，但在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "Main conclusion",
+                "Judgment": "FN",
+                "Reason": "文本有一个总结性的结论部分，指出在 InP 上生长的 HEMT 在冷却时表现出更优越的性能，原因是更好的电子限制，这一综合发现在提取的 JSON 中没有被明确捕捉到。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1070QE2005v035n12ABEH013044.json",
+        "metrics": {
+            "TP": 62,
+            "FP": 4,
+            "FN": 7,
+            "precision": 0.9394,
+            "recall": 0.8986,
+            "f1_score": 0.9185
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Radius of Curvature",
+                "Incorrect_Value": "1.823 μm",
+                "Judgment": "FP",
+                "Reason": "原始文本指出的值为 1.823 mm。"
+            },
+            {
+                "Incorrect_Field": "Outer Boundary Radius",
+                "Incorrect_Value": "0.912 μm",
+                "Judgment": "FP",
+                "Reason": "原始文本指出的值为 0.912 mm。"
+            },
+            {
+                "Incorrect_Field": "Bend Radius",
+                "Incorrect_Value": "2.0 μm",
+                "Judgment": "FP",
+                "Reason": "原始文本指出的值为 2.0 mm。"
+            },
+            {
+                "Incorrect_Field": "Reflection Coefficient",
+                "Incorrect_Value": "30%",
+                "Judgment": "FP",
+                "Reason": "原文指出 30% 的反射率属于激光器芯片的一端，而不是微反射镜，且未指明微反射镜的反射率。"
+            },
+            {
+                "Missing_Field": "Waveguide Deposition Method",
+                "Judgment": "FN",
+                "Reason": "文本提到 SiO2 和 SiON 层是使用 PECVD Plasmalab80+ 设备沉积的，但提取的 JSON 中缺少此关键制造细节。"
+            },
+            {
+                "Missing_Field": "Waveguide Annealing Process",
+                "Judgment": "FN",
+                "Reason": "文本描述了在氩气气氛中于 1150 °C 下退火两小时的关键步骤，但此信息被遗漏。"
+            },
+            {
+                "Missing_Field": "Shortest Waveguide Length",
+                "Judgment": "FN",
+                "Reason": "文本提供了 5729 μm 的最短波导长度，这是为将器件装入 10 x 10 mm 芯片而做出的关键设计选择，但此参数缺失。"
+            },
+            {
+                "Missing_Field": "Adiabatic Junction Specifications",
+                "Judgment": "FN",
+                "Reason": "文本详细说明了长度 110 μm、初始宽度 6.5 μm 的绝热连接，这是为容纳器件的重要设计细节，但被遗漏。"
+            },
+            {
+                "Missing_Field": "Angle Between Focusing Elements",
+                "Judgment": "FN",
+                "Reason": "文本提到 24.628° 的夹角是特意选择的，以使整个器件能装入芯片，但这个设计参数未被提取。"
+            },
+            {
+                "Missing_Field": "Laser AR Coating Reflectivity",
+                "Judgment": "FN",
+                "Reason": "文本指出激光器芯片的 AR 涂层反射率为 0.5%，这是激光器配置的一个关键参数，但在提取内容中被遗漏。"
+            },
+            {
+                "Missing_Field": "Tunable Radiation Source for Measurements",
+                "Judgment": "FN",
+                "Reason": "文本指出使用了 EXFO IQ-206 作为可调谐辐射源进行测量，但此表征设置的组成部分缺失了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1016j.ijimpeng.2011.06.002.json",
+        "metrics": {
+            "TP": 160,
+            "FP": 1,
+            "FN": 4,
+            "precision": 0.9938,
+            "recall": 0.9756,
+            "f1_score": 0.9846
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "system_name",
+                "Incorrect_Value": "Gold Rod (1.0 mm diameter, 50 mm length)",
+                "Judgment": "FP",
+                "Reason": "原始文本描述了两种金杆：直径 1.0 mm、长度 70 mm 和直径 0.75 mm、长度 50 mm。文本没有提及或暗示直径 1.0 mm 和长度 50 mm 的组合。"
+            },
+            {
+                "Missing_Field": "Updated penetration velocity regression equation",
+                "Judgment": "FN",
+                "Reason": "文本提出了一个贯穿整个数据集的关键最终方程（u = -0.3662 + 0.7165vp），该方程将金杆的穿透速度与撞击速度相关联。这个核心定量发现在 JSON 中缺失了。"
+            },
+            {
+                "Missing_Field": "Explanation for similar penetration rates",
+                "Judgment": "FN",
+                "Reason": "文本提出一个核心假设来解释为什么完整和预损坏陶瓷的穿透速率没有差异：因为损伤前锋的传播速度比杆快，所以在撞击后，杆总是穿透已损坏的材料。这个主要结论在 JSON 中缺失了。"
+            },
+            {
+                "Missing_Field": "Explanation for data scatter",
+                "Judgment": "FN",
+                "Reason": "文本得出结论，观察到的数据分散很可能是由于脆性材料在穿透过程中固有的失效动力学变异性所致。这个对实验结果特征的重要解释在 JSON 中被遗漏了。"
+            },
+            {
+                "Missing_Field": "Resolution of previous data discrepancy",
+                "Judgment": "FN",
+                "Reason": "文本解释了早期研究中数据差异的原因：数据分析方法不同（旧研究强制回归线通过原点）。这个解释对于理解研究的背景和贡献至关重要，但在 JSON 中缺失了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1007s11082-020-02488-1.json",
+        "metrics": {
+            "TP": 32,
+            "FP": 3,
+            "FN": 4,
+            "precision": 0.9143,
+            "recall": 0.8889,
+            "f1_score": 0.9014
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "components[1].role_in_system",
+                "Incorrect_Value": "n-type InP Buffer Layer",
+                "Judgment": "FP",
+                "Reason": "原文指出缓冲层是“未掺杂InP缓冲层”，而非n型。"
+            },
+            {
+                "Incorrect_Field": "components[4].properties[0].source",
+                "Incorrect_Value": "Figure 6a",
+                "Judgment": "FP",
+                "Reason": "原文将10 µm的钝化厚度归因于模型验证过程，而非图6a。"
+            },
+            {
+                "Incorrect_Field": "performance_metrics[0].value",
+                "Incorrect_Value": "<=26 nA/cm²",
+                "Judgment": "FP",
+                "Reason": "原文摘要明确指出暗电流“≥ 26 nA/cm²”，这与提取的“<=26 nA/cm²”相矛盾。"
+            },
+            {
+                "Missing_Field": "Qualitative Conclusion on High Quantum Efficiency",
+                "Judgment": "FN",
+                "Reason": "文本摘要得出的结论是器件具有“高量子效率”，这是对性能的一个关键定性评估，但在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "Model Limitation on Surface Recombination",
+                "Judgment": "FN",
+                "Reason": "文本明确指出模拟模型“未考虑表面复合机制”，这是理解模型局限性和高偏压下结果的一个关键细节，而这被忽略了。"
+            },
+            {
+                "Missing_Field": "Experimental Validation Reference",
+                "Judgment": "FN",
+                "Reason": "文本详细说明，所开发的模型是使用Wang等人（2015）报告的实验结构进行校准和验证的，这是模型可信度的一个核心方面，但在提取内容中被省略了。"
+            },
+            {
+                "Missing_Field": "Dark Current Component Breakdown",
+                "Judgment": "FN",
+                "Reason": "文本描述了总暗电流是由扩散电流、产生-复合电流和隧穿电流（包括BBT和TAT分量）组成的，这是物理模型的一个核心细节，而这在提取的摘要中被忽略了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1021j100173a022.json",
+        "metrics": {
+            "TP": 0,
+            "FP": 0,
+            "FN": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "error": "Verification result was not a list."
+        },
+        "verification_details": ""
+    },
+    {
+        "file_name": "10.25141.3227.json",
+        "metrics": {
+            "TP": 50,
+            "FP": 2,
+            "FN": 6,
+            "precision": 0.9615,
+            "recall": 0.8929,
+            "f1_score": 0.9259
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Maximum deflection angle (oxidation)",
+                "Incorrect_Value": "47°",
+                "Judgment": "FP",
+                "Reason": "原始文本指出，氧化电荷（0.18 C）产生的最大偏转角为29°，而不是47°。"
+            },
+            {
+                "Incorrect_Field": "Maximum deflection angle (reduction)",
+                "Incorrect_Value": "29°",
+                "Judgment": "FP",
+                "Reason": "原始文本指出，还原电荷（0.20 C）产生的最大偏转角为47°，而不是29°。"
+            },
+            {
+                "Missing_Field": "Primary research objective",
+                "Judgment": "FN",
+                "Reason": "原文指出研究的主要目标是开发用于空间充气结构健康监测和损坏检测的致动器，这是一个被遗漏的关键背景信息。"
+            },
+            {
+                "Missing_Field": "Specific design criteria",
+                "Judgment": "FN",
+                "Reason": "原文推导了具体的应变要求（约0.008至0.01）和应力要求（0.5 MPa）作为设计标准，而这些在提取的JSON中被忽略了，尽管结果与之进行了比较。"
+            },
+            {
+                "Missing_Field": "Critical shortcoming of IPMC",
+                "Judgment": "FN",
+                "Reason": "原文强调IPMC的一个关键缺点是在干燥环境中性能逐渐丧失，这对于评估其在太空应用中的适用性至关重要，但这一点被忽略了。"
+            },
+            {
+                "Missing_Field": "Major conclusion",
+                "Judgment": "FN",
+                "Reason": "文本的主要结论是，需要一种应变能力远高于当前设计的复合致动器设计，才能成功应用于空间充气结构，但这一关键发现被遗漏了。"
+            },
+            {
+                "Missing_Field": "Primary funding source",
+                "Judgment": "FN",
+                "Reason": "原文提到研究的主要资金来源是NASA喷气推进实验室，这是一个被忽略的关键信息。"
+            },
+            {
+                "Missing_Field": "Scalability issue of CP actuators",
+                "Judgment": "FN",
+                "Reason": "原文明确指出可扩展性是基于PPy的致动器的限制因素，这是一个被忽略的关键挑战。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.10631.4919549.json",
+        "metrics": {
+            "TP": 30,
+            "FP": 2,
+            "FN": 4,
+            "precision": 0.9375,
+            "recall": 0.8824,
+            "f1_score": 0.9091
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Excitation Power Density",
+                "Incorrect_Value": "> 10^3 W·cm⁻²",
+                "Judgment": "FP",
+                "Reason": "原文指出，用于测量 FWHM 的估计激发密度为 13 W·cm⁻²，并且实验生成了超过背景掺杂密度一个数量级的载流子密度，但没有提及或支持 JSON 中的值（> 10^3 W·cm⁻²）。"
+            },
+            {
+                "Incorrect_Field": "Photoluminescence Efficiency",
+                "Incorrect_Value": "Relatively high even when grown on highly mismatched GaAs substrates",
+                "Judgment": "FP",
+                "Reason": "原文中关于在高度失配的 GaAs 衬底上具有相对较高光致发光效率的陈述，是针对 InAs/InAsSb T2SL 材料体系的一般性描述，而非本文研究的特定样品（该样品生长在 n 型 GaSb 衬底上）。"
+            },
+            {
+                "Missing_Field": "Experimental Temperature",
+                "Judgment": "FN",
+                "Reason": "原文明确指出，主要的压力依赖性光致发光实验是在 10 K 的温度下进行的，这是一个关键的实验条件，但在 JSON 中被遗漏。"
+            },
+            {
+                "Missing_Field": "Valence Band Pressure Coefficient",
+                "Judgment": "FN",
+                "Reason": "为了确定缺陷能级的位置，文中假设价带边缘的压力系数为 -11 meV·GPa⁻¹。这个关键的假设参数在提取的 JSON 中缺失了。"
+            },
+            {
+                "Missing_Field": "Crossover Pressure and Energy Shift",
+                "Judgment": "FN",
+                "Reason": "原文确定，能级交叠发生在约 2 GPa 的压力下，对应约 0.186 eV 的能量偏移。这一核心的分析结果在 JSON 中未被明确记录。"
+            },
+            {
+                "Missing_Field": "Hole Miniband Confinement Energy",
+                "Judgment": "FN",
+                "Reason": "原文指出，电子和孔子的微带限制能分别为 18 meV 和 65 meV。JSON 只包含了电子的限制能，而忽略了孔子的限制能数据。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1016j.nima.2005.01.169.json",
+        "metrics": {
+            "TP": 68,
+            "FP": 1,
+            "FN": 2,
+            "precision": 0.9855,
+            "recall": 0.9714,
+            "f1_score": 0.9784
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "First Shell In-As Interatomic Distance (R_In_As_QD)",
+                "Incorrect_Value": "2.54 Å",
+                "Judgment": "FP",
+                "Reason": "原始文本指出，对于 InAs/AlAs 异质结构，第一壳层 In-As 的原子间距为 2.58 Å，而非 2.54 Å。"
+            },
+            {
+                "Missing_Field": "主要结构结论",
+                "Judgment": "FN",
+                "Reason": "JSON 缺失了关于异质结构形态学的主要结论：GaN/AlN 包含具有强弹性应变的二维岛，而 InAs/AlAs 包含由于弹性应变弛豫而具有不均匀微观结构的三维岛。这些是论文的核心发现。"
+            },
+            {
+                "Missing_Field": "异质结构层状结构细节",
+                "Judgment": "FN",
+                "Reason": "JSON 缺失了异质结构的详细层状结构，这对于理解实验设置至关重要：GaN/AlN 样品由 10 层 7.5 Å 厚的 GaN 层（由 50 Å 厚的 AlN 层隔开）组成，而 InAs/AlAs 样品包含 6 层 6.6 Å 厚的 InAs 层（由 100 Å 厚的 AlAs 层隔开）。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.3390nano10061111.json",
+        "metrics": {
+            "TP": 69,
+            "FP": 2,
+            "FN": 4,
+            "precision": 0.9718,
+            "recall": 0.9452,
+            "f1_score": 0.9583
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "i-region doping concentration",
+                "Incorrect_Value": "1 × 10^17 cm^-3",
+                "Judgment": "FP",
+                "Reason": "原文指出纳米线是轴向p-i-n结，其中p区和n区被掺杂，但i区是本征的。文本没有为i区指定掺杂浓度，因此分配的值是错误的。"
+            },
+            {
+                "Incorrect_Field": "Thickness",
+                "Incorrect_Value": "Same as HNA (4 μm)",
+                "Judgment": "FP",
+                "Reason": "原文指出薄膜对应物具有与HNA相同的厚度，即纳米线的直径（180 nm）。值4 μm是纳米线的长度，而不是结构的厚度。"
+            },
+            {
+                "Missing_Field": "Funding Sources",
+                "Judgment": "FN",
+                "Reason": "文本在“Funding”部分明确列出了几个资金来源，包括来自国家自然科学基金的拨款，这是一个关键的学术信息，但在提取的JSON中被忽略了。"
+            },
+            {
+                "Missing_Field": "Material Volume Comparison",
+                "Judgment": "FN",
+                "Reason": "文本指出，AE-HNA结构仅使用31.4%的薄膜材料量就实现了3.7倍的效率提升。这一关于材料效率的关键发现在JSON中被遗漏了。"
+            },
+            {
+                "Missing_Field": "Publication Information",
+                "Judgment": "FN",
+                "Reason": "文本的标题、期刊（Nanomaterials）、年份（2020）和DOI在提取的JSON中被忽略了，这些是识别和引用该研究的基本信息。"
+            },
+            {
+                "Missing_Field": "Proposed Fabrication Process",
+                "Judgment": "FN",
+                "Reason": "文本在“Methods”部分详细描述了一个多步骤的潜在制造工艺，包括纳米线生长、转移、排列和电极沉积。这一信息对于理解器件的实际可行性很重要，但在JSON中被遗漏了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.11161.584746.json",
+        "metrics": {
+            "TP": 151,
+            "FP": 5,
+            "FN": 7,
+            "precision": 0.9679,
+            "recall": 0.9557,
+            "f1_score": 0.9618
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Thickness",
+                "Incorrect_Value": "800 Å",
+                "Judgment": "FP",
+                "Reason": "原始文本指出初始 GaAs 层的厚度是 500 Å（'an SOO-A.-thick initial layer'）。"
+            },
+            {
+                "Incorrect_Field": "Low-bias current fitting accuracy",
+                "Incorrect_Value": "Fits within 20% of experimental data",
+                "Judgment": "FP",
+                "Reason": "原始文本指出，对于 25% Al 样品，使用 Lb=90 Å 和 L=60 Å 的模型能更好地拟合 I-V 曲线，但并未提及该拟合在 20% 的精度范围内。20% 的精度是针对 30% Al 样品的。"
+            },
+            {
+                "Incorrect_Field": "role_in_system",
+                "Incorrect_Value": "Dislocation reduction layer",
+                "Judgment": "FP",
+                "Reason": "原始文本描述的 0.5 μm GaAs 层是 'cap layer'（盖层），而非第二个缓冲层。"
+            },
+            {
+                "Incorrect_Field": "components",
+                "Incorrect_Value": "为参考样品创建了详细的组件列表",
+                "Judgment": "FP",
+                "Reason": "原始文本只提到一个没有 MQW 的参考样品，并未描述其具体的各层结构（如初始层、缓冲层、盖层）。"
+            },
+            {
+                "Incorrect_Field": "components",
+                "Incorrect_Value": "为GaAs基底上的类似结构创建了详细的组件列表",
+                "Judgment": "FP",
+                "Reason": "原始文本只提及将 Si 基底上的 MQW 结构与 GaAs 基底上的类似结构进行比较，并未提供这些 GaAs 基底上类似结构的具体层数、厚度等详细组成信息。"
+            },
+            {
+                "Missing_Field": "MBE growth system",
+                "Judgment": "FN",
+                "Reason": "原始文本明确指出了分子束外延（MBE）生长系统是 'computer-controlled Perkin-Elmer 430 MBE system'，这是实验方法的关键信息。"
+            },
+            {
+                "Missing_Field": "Substrate cleaning method",
+                "Judgment": "FN",
+                "Reason": "原始文本详细描述了 Si 衬底的清洁方法（Shiraki method）和氧化层脱附过程，这是样品制备的重要步骤。"
+            },
+            {
+                "Missing_Field": "Growth technique",
+                "Judgment": "FN",
+                "Reason": "原始文本提到了 GaAs 层的生长使用了 'two-step growth technique'（两步生长技术），这是控制晶体质量的关键工艺。"
+            },
+            {
+                "Missing_Field": "X-ray superlattice peak observation",
+                "Judgment": "FN",
+                "Reason": "原始文本在 X 射线摇摆曲线测量结果中指出 'no superlattice peak observed'（未观察到超晶格峰），这是一个重要的表征结果，解释了峰宽较大的原因。"
+            },
+            {
+                "Missing_Field": "Funding source",
+                "Judgment": "FN",
+                "Reason": "原始文本在致谢部分提到了研究由 'DOD-URIP under ONR and ARO and by Intel-Micro program' 支持，这是学术论文的关键背景信息。"
+            },
+            {
+                "Missing_Field": "Acknowledgments",
+                "Judgment": "FN",
+                "Reason": "原始文本致谢了 Dr. R. Alt 在 FTIR 测量方面提供的帮助，这明确了部分关键实验的来源。"
+            },
+            {
+                "Missing_Field": "Device thermal stability",
+                "Judgment": "FN",
+                "Reason": "原始文本在结论部分提到器件在 77 K 到 300 K 的热循环中是稳定的，这是关于器件性能和可靠性的重要发现。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1109IBCAST.2007.4379899.json",
+        "metrics": {
+            "TP": 49,
+            "FP": 6,
+            "FN": 2,
+            "precision": 0.8909,
+            "recall": 0.9608,
+            "f1_score": 0.9245
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Gain",
+                "Incorrect_Value": "47 dB",
+                "Judgment": "FP",
+                "Reason": "原始文本指出，这项工作的增益是 12.5 dB（如摘要和表 I 所示），而不是 47 dB（该值来自表 I 中引用的另一项工作 [10]）。"
+            },
+            {
+                "Incorrect_Field": "Output Power",
+                "Incorrect_Value": "42 dBm",
+                "Judgment": "FP",
+                "Reason": "原始文本指出，这项工作的输出功率是 40 dBm（如摘要和表 I 所示），而不是 42 dBm（该值来自表 I 中引用的另一项工作 [10]）。"
+            },
+            {
+                "Incorrect_Field": "Efficiency",
+                "Incorrect_Value": "13%",
+                "Judgment": "FP",
+                "Reason": "原始文本指出，这项工作的效率是 38%（如摘要和表 I 所示），而不是 13%（该值来自表 I 中引用的另一项工作 [11]）。"
+            },
+            {
+                "Incorrect_Field": "Operating Frequency Range",
+                "Incorrect_Value": "2.4-2.5 GHz",
+                "Judgment": "FP",
+                "Reason": "原始文本指出，这项工作的频率范围是 2.2-2.4 GHz（如表 I 所示），而不是 2.4-2.5 GHz（该值来自表 I 中引用的另一项工作 [9]）。"
+            },
+            {
+                "Incorrect_Field": "Typical Output Power",
+                "Incorrect_Value": "40 dBm (1 Watt)",
+                "Judgment": "FP",
+                "Reason": "原始文本中声明的输出功率为 40 dBm (lOWatt)，意为 10 瓦特，而不是 1 瓦特。"
+            },
+            {
+                "Incorrect_Field": "Output Power",
+                "Incorrect_Value": "40 dBm (1 Watt)",
+                "Judgment": "FP",
+                "Reason": "原始文本中声明的输出功率为 40 dBm (lOWatt)，意为 10 瓦特，而不是 1 瓦特。"
+            },
+            {
+                "Missing_Field": "Amplifier Biasing Conditions",
+                "Judgment": "FN",
+                "Reason": "文本明确说明了关键的操作偏置条件（Vds=10V, Vgs=-1.6V, Id=2.6A），这对理解放大器的设计和性能至关重要，但此信息在 JSON 中被遗漏了。"
+            },
+            {
+                "Missing_Field": "Amplifier Class of Operation",
+                "Judgment": "FN",
+                "Reason": "文本指出放大器工作在 A 类模式（'HPA is working in class-A mode'），这是理解其线性度和效率权衡的一个关键设计选择，但此信息在 JSON 中缺失了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1016j.solener.2019.02.029.json",
+        "metrics": {
+            "TP": 142,
+            "FP": 5,
+            "FN": 8,
+            "precision": 0.966,
+            "recall": 0.9467,
+            "f1_score": 0.9562
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Onset Temperature (Crystallization)",
+                "Incorrect_Value": "42.31°C",
+                "Judgment": "FP",
+                "Reason": "原文（表5）指出 42.31°C 是石蜡第二个熔化峰的开始温度，而不是结晶温度。该字段的标签和分类是错误的。"
+            },
+            {
+                "Incorrect_Field": "Onset Temperature (Crystallization)",
+                "Incorrect_Value": "43.34°C",
+                "Judgment": "FP",
+                "Reason": "原文（表5）指出 43.34°C 是 EG/石蜡复合材料第二个熔化峰的开始温度，而不是结晶温度。该字段的标签和分类是错误的。"
+            },
+            {
+                "Incorrect_Field": "Specific Heat",
+                "Incorrect_Value": "1.4071 W/mK",
+                "Judgment": "FP",
+                "Reason": "原文（表7）中给出的单位是 MJ/m³K，而不是 W/mK。"
+            },
+            {
+                "Incorrect_Field": "Specific Heat",
+                "Incorrect_Value": "2.1834 MJ/m³K",
+                "Judgment": "FP",
+                "Reason": "原文（表7）指出该值（2.1834 MJ/m³K）属于最终的 EG/PCM 地聚合物复合材料，而不是膨胀石墨浸渍石蜡本身。"
+            },
+            {
+                "Incorrect_Field": "Thermal Conductivity",
+                "Incorrect_Value": "0.2520 W/mK",
+                "Judgment": "FP",
+                "Reason": "原文（表7）指出纯石蜡的热导率为 0.2520 W/mK，而膨胀石墨浸渍石蜡的热导率为 0.9425 W/mK。"
+            },
+            {
+                "Missing_Field": "Compressive Strength of EG/PCM Geopolymer Composite",
+                "Judgment": "FN",
+                "Reason": "原文在摘要和结论部分都明确指出，最终复合材料的平均压缩强度为 10.3 MPa，这是一个关键的机械性能指标，但在提取内容中缺失。"
+            },
+            {
+                "Missing_Field": "Crystallization Temperatures of Expanded Graphite Impregnated Paraffin",
+                "Judgment": "FN",
+                "Reason": "原文（表5）详细列出了 EG/石蜡复合材料在结晶过程中的开始、峰值和结束温度（例如 57.43°C, 56.16°C 等），这些关键热性能数据在提取内容中被完全遗漏。"
+            },
+            {
+                "Missing_Field": "Crystallization Temperatures of Paraffin",
+                "Judgment": "FN",
+                "Reason": "原文（表5）详细列出了石蜡在结晶过程中的开始、峰值和结束温度（例如 56.28°C, 55.34°C 等），这些关键热性能数据在提取内容中被完全遗漏。"
+            },
+            {
+                "Missing_Field": "Density of EG/PCM Geopolymer Composite",
+                "Judgment": "FN",
+                "Reason": "原文在摘要和结论部分都明确指出，最终复合材料的密度为 873.32 kg/m³，这是一个关键物理属性，但在提取内容中缺失。"
+            },
+            {
+                "Missing_Field": "Heat Permeability of EG/PCM Geopolymer Composite",
+                "Judgment": "FN",
+                "Reason": "原文（结论部分）指出最终复合材料的渗透热为 46.3241 kJ/kg，这是一个关键数据，但在提取内容中缺失。"
+            },
+            {
+                "Missing_Field": "Optimal EG/PCM Mixing Concentration",
+                "Judgment": "FN",
+                "Reason": "原文在摘要部分指出了一个关键结论：25% 的 EG/PCM 浓度是最佳混合浓度，这个核心发现在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "Outdoor Thermal Performance of Composite Wall",
+                "Judgment": "FN",
+                "Reason": "原文报告了复合材料壁在户外测试中的关键性能数据，例如白天平均温度 (51 °C) 和夜间平均温度 (36 °C)，并与传统材料进行了比较。这些验证其实际应用效果的关键数据在提取内容中缺失。"
+            },
+            {
+                "Missing_Field": "Thermal Conductivity of EG/PCM Geopolymer Composite",
+                "Judgment": "FN",
+                "Reason": "原文在摘要和结论部分都明确指出，最终复合材料的导热系数为 2.4561 W/mK，这是一个关键性能指标，但在提取内容中缺失。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1038srep06491.json",
+        "metrics": {
+            "TP": 70,
+            "FP": 1,
+            "FN": 4,
+            "precision": 0.9859,
+            "recall": 0.9459,
+            "f1_score": 0.9655
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Hologram Substrate Type",
+                "Incorrect_Value": "BK7 glass",
+                "Judgment": "FP",
+                "Reason": "原始文本没有明确说明超表面全息图的基底材料是BK7玻璃，只描述了光刻胶全息图案是通过激光干涉光刻技术制作的。"
+            },
+            {
+                "Missing_Field": "Funding Sources",
+                "Judgment": "FN",
+                "Reason": "原始文本在致谢部分详细列出了研究的资助来源（如国家自然科学基金会），这对于理解研究背景和支持至关重要，但在提取的JSON中被遗漏。"
+            },
+            {
+                "Missing_Field": "Metasurface Hologram Fabrication Method",
+                "Judgment": "FN",
+                "Reason": "原始文本明确指出超表面全息图是通过激光干涉光刻技术制作的，但这一关键制造信息在提取的JSON中未被记录。"
+            },
+            {
+                "Missing_Field": "Metasurface Hologram Grating Dimensions",
+                "Judgment": "FN",
+                "Reason": "原始文本为全息图中的光栅结构提供了关键尺寸参数：介电质PMMA宽度 (t1=150 nm)、PMMA厚度 (h1=110 nm) 和Al厚度 (h2=50 nm)，这些信息在提取的JSON中被遗漏。"
+            },
+            {
+                "Missing_Field": "Underlying Physical Mechanism / Theoretical Explanation",
+                "Judgment": "FN",
+                "Reason": "原始文本的核心结论是，该超表面的独特性能源于其“类TE金属/类TM介电质”特性，并可用基于周期性金属-绝缘体-金属波导的布洛赫理论来解释。这一基本物理机制是理解该工作的关键，但在提取的JSON中完全缺失。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1016j.applthermaleng.2015.12.056.json",
+        "metrics": {
+            "TP": 192,
+            "FP": 6,
+            "FN": 6,
+            "precision": 0.9697,
+            "recall": 0.9697,
+            "f1_score": 0.9697
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Dimensions",
+                "Incorrect_Value": "Length: 100 mm, Width: 100 mm, Thickness: 2.45 mm",
+                "Judgment": "FP",
+                "Reason": "根据原始文本中的表 2，PCM Sheet A 的厚度为 1.60 毫米，而不是 2.45 毫米。"
+            },
+            {
+                "Incorrect_Field": "Dimensions",
+                "Incorrect_Value": "Length: 100 mm, Width: 100 mm, Thickness: 2.45 mm",
+                "Judgment": "FP",
+                "Reason": "根据原始文本中的表 2，PCM Sheet B 的厚度为 2.00 毫米，而不是 2.45 毫米。"
+            },
+            {
+                "Incorrect_Field": "Maximum Temperature Rise",
+                "Incorrect_Value": "Lower than PCM sheet (25×25×4 mm)",
+                "Judgment": "FP",
+                "Reason": "根据原始文本的图 12(b)，对于前机箱温度，PE 片 (50×50×1 mm) 的最大温升略高于 PCM 片 (25×25×4 mm)。"
+            },
+            {
+                "Incorrect_Field": "Maximum Temperature Rise",
+                "Incorrect_Value": "Lowest among all test conditions",
+                "Judgment": "FP",
+                "Reason": "根据原始文本的图 12(a)，对于加热器温度，PCM 片 (50×50×1 mm) 与铜箔结合的条件具有最低的温升，而不是 PCM 片 (25×25×4 mm) 与铜箔结合的条件。"
+            },
+            {
+                "Incorrect_Field": "Saturation Time",
+                "Incorrect_Value": "Similar to PCM sheet (25×25×4 mm)",
+                "Judgment": "FP",
+                "Reason": "根据原始文本的图 13(a)，对于加热器，PCM 片 (50×50×1 mm) 与铜箔结合的饱和时间明显短于 PCM 片 (25×25×4 mm) 的饱和时间。"
+            },
+            {
+                "Incorrect_Field": "Power Output",
+                "Incorrect_Value": "2.00 W",
+                "Judgment": "FP",
+                "Reason": "原始文本中，No PCM Sheet (Control Condition) 描述的是智能手机模拟器实验，其加热器在稳态下的功率为 1.3 W，而不是 2.00 W（2.00 W 是第一个实验的功率）。"
+            },
+            {
+                "Missing_Field": "质量与饱和时间之间的线性关系",
+                "Judgment": "FN",
+                "Reason": "原始文本在图 7 和结论 (1) 中指出，饱和时间与 PCM 片的质量之间存在线性关系。这是一个关键的量化发现，但在提取的 JSON 中被遗漏了。"
+            },
+            {
+                "Missing_Field": "潜热相对于显热的主导作用",
+                "Judgment": "FN",
+                "Reason": "原始文本在结论 (2) 中明确指出，PCM 的潜热对饱和时间的影响大于其显热。这是一个关于热管理机制的关键结论，但在提取的 JSON 中缺失。"
+            },
+            {
+                "Missing_Field": "PCM sheet 对加热器和机箱温度的不同影响",
+                "Judgment": "FN",
+                "Reason": "原始文本在结论 (3) 中总结，与 PE 片相比，使用 PCM 片会导致加热器温度更高，但机箱表面温度更低。这个重要的热设计结论在提取的 JSON 中没有被明确捕捉。"
+            },
+            {
+                "Missing_Field": "数值模拟中热物理性质估算方法的有效性",
+                "Judgment": "FN",
+                "Reason": "原始文本在结论 (6) 中得出结论，使用混合法则和 Bruggeman 方程可以有效地估算 MPCM 复合材料的热物理性质以进行模拟。这是数值模拟部分的核心成果，但在提取的 JSON 中缺失了。"
+            },
+            {
+                "Missing_Field": "热电偶校准和不确定度",
+                "Judgment": "FN",
+                "Reason": "原始文本在 2.1.2 节中指明，实验使用的热电偶在 0-100°C 范围内进行了校准，不确定度为 0.5°C。这是评估数据准确性的关键信息，但在提取的 JSON 中被忽略了。"
+            },
+            {
+                "Missing_Field": "数值模拟的边界条件",
+                "Judgment": "FN",
+                "Reason": "原始文本在 4.2 节中详细列出了数值模拟的边界条件，包括不同表面的热传递系数（5.7, 6.0, 3.7 W/m²·K）和表面发射率（0.9）。这些对模型验证至关重要的参数在提取的 JSON 中缺失了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.10631.368553.json",
+        "metrics": {
+            "TP": 39,
+            "FP": 2,
+            "FN": 4,
+            "precision": 0.9512,
+            "recall": 0.907,
+            "f1_score": 0.9286
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Thickness",
+                "Incorrect_Value": "0.8 μm",
+                "Judgment": "FP",
+                "Reason": "原文指出，体材料样品是 0.8 mm 厚，而不是 0.8 μm。"
+            },
+            {
+                "Incorrect_Field": "Electron Accumulation",
+                "Incorrect_Value": "No perceptible electron accumulation at room temperature",
+                "Judgment": "FP",
+                "Reason": "原文明确指出，即使在 77 K 时，量子阱中也没有可察觉的电子积累，这是一个比室温更严格的条件。"
+            },
+            {
+                "Missing_Field": "Quantum dot formation method",
+                "Judgment": "FN",
+                "Reason": "文本描述了量子点形成的关键细节，包括使用 Stranski–Krastanow 模式、12 秒的中断以及预先沉积 4 ML 的 GaP 层来改善均匀性，但此信息在 JSON 中缺失。"
+            },
+            {
+                "Missing_Field": "Extrapolation for zero-field emission energy",
+                "Judgment": "FN",
+                "Reason": "文本解释了单电子基态的 240 meV 发射能量是通过将测量到的活化能外推到零场以补偿场致势垒降低而获得的，这一关键计算步骤在 JSON 中被省略。"
+            },
+            {
+                "Missing_Field": "Derivation of Coulomb charging energy",
+                "Judgment": "FN",
+                "Reason": "文本详细说明了 6-8 meV 的库仑充电能量是如何通过分析不同电子占据数下发射能的 45 meV 总变化，并考虑能级间距推导出来的，这一背景信息在 JSON 中缺失。"
+            },
+            {
+                "Missing_Field": "100 meV electron trap (Peak C)",
+                "Judgment": "FN",
+                "Reason": "文本在量子阱样品的 DLTS 谱中识别出了一个活化能为 100 meV 的第三个电子陷阱（峰 C），但此数据点在 JSON 中未被包含。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1364AO.54.009177.json",
+        "metrics": {
+            "TP": 57,
+            "FP": 4,
+            "FN": 8,
+            "precision": 0.9344,
+            "recall": 0.8769,
+            "f1_score": 0.9048
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Dielectric Tensor Elements",
+                "Incorrect_Value": "εx = ε∞ - ω²p/(ω² - iγω + ω²c), εy = εz = ε∞ - ω²p/(ω² - iγω - ω²c), εyz = iω²pωc/(ω² - iγω - ω²c)",
+                "Judgment": "FP",
+                "Reason": "原始文本指出介电张量元素为 εx = ε∞−ω²p/(ω(ω+γi))、εy = εz = ε∞−ω²p(ω+γi)/(ω²(ω+γi)²−ω²c) 和 εyz = iω²pωc/(ω²(ω+γi)²−ω²c)，这与提取的公式不同。"
+            },
+            {
+                "Incorrect_Field": "Carrier Density (N)",
+                "Incorrect_Value": "N = 5.76×10¹⁴ T¹.⁵ exp(-0.26/(√(2×8.625×10⁻⁵)T))",
+                "Judgment": "FP",
+                "Reason": "原始文本中公式为 N(cm−3) = 5.76×1014 T1.5 exp(−0.26/(2×8.625×10−5 ×T))，提取的值错误地包含了平方根符号。"
+            },
+            {
+                "Incorrect_Field": "Dielectric Tensor Elements",
+                "Incorrect_Value": "εx = ε∞ - ω²p/(ω² - iγω + ω²c), εy = εz = ε∞ - ω²p/(ω² - iγω - ω²c), εyz = iω²pωc/(ω² - iγω - ω²c)",
+                "Judgment": "FP",
+                "Reason": "原始文本指出介电张量元素为 εx = ε∞−ω²p/(ω(ω+γi))、εy = εz = ε∞−ω²p(ω+γi)/(ω²(ω+γi)²−ω²c) 和 εyz = iω²pωc/(ω²(ω+γi)²−ω²c)，这与提取的公式不同。"
+            },
+            {
+                "Incorrect_Field": "Carrier Density (N)",
+                "Incorrect_Value": "N = 5.76×10¹⁴ T¹.⁵ exp(-0.26/(√(2×8.625×10⁻⁵)T))",
+                "Judgment": "FP",
+                "Reason": "原始文本中公式为 N(cm−3) = 5.76×1014 T1.5 exp(−0.26/(2×8.625×10−5 ×T))，提取的值错误地包含了平方根符号。"
+            },
+            {
+                "Missing_Field": "Voigt magneto-optical configuration",
+                "Judgment": "FN",
+                "Reason": "文本描述了矢量 K、E 和 B 相互正交，形成 Voigt 磁光构型，这是理解装置物理原理的关键信息，但在提取的 JSON 中被遗漏。"
+            },
+            {
+                "Missing_Field": "Specific resonance splitting conditions (T=185K, B=0.3T)",
+                "Judgment": "FN",
+                "Reason": "文本详细说明了在 T=185K 和 B=0.3T 时，正向和反向波的谐振分裂发生在 0.615 THz 和 0.678 THz，这是非互易传输的直接证据，但此关键数据在 JSON 中缺失。"
+            },
+            {
+                "Missing_Field": "Temperature-dependent resonance shift direction",
+                "Judgment": "FN",
+                "Reason": "文本指出，当温度高于 218 K 时，谐振频率随磁场增加而降低；当温度低于 218 K 时，则相反。这一关键行为模式在 JSON 中未被提及。"
+            },
+            {
+                "Missing_Field": "Wider range of stable resonance frequency",
+                "Judgment": "FN",
+                "Reason": "文本提到在 218 K 时，谐振峰在 0.11 到 0.35 T 的磁场变化范围内保持在 0.75 THz，而 JSON 仅捕捉了隔离度大于 30 dB 的范围（0.23-0.35 T），遗漏了更宽的稳定谐振频率范围。"
+            },
+            {
+                "Missing_Field": "Formula for resonance frequency shift (ωv)",
+                "Judgment": "FN",
+                "Reason": "文本提供了一个描述谐振频率移动的公式 ωv = k(ωp0 − ωp)ωc + ω0，这是量化设备响应的关键，但该公式在 JSON 中缺失。"
+            },
+            {
+                "Missing_Field": "Magnetic field direction sensing capability",
+                "Judgment": "FN",
+                "Reason": "文本解释了该设备可以通过比较正向和反向波的谐振频率来判断磁场方向，这是传感器功能的一个重要方面，但在 JSON 中被忽略。"
+            },
+            {
+                "Missing_Field": "Formula for sensitivity calculation (S)",
+                "Judgment": "FN",
+                "Reason": "文本给出了计算灵敏度的公式 S = k(ωp0 − ωp)，这在 JSON 中被遗漏。"
+            },
+            {
+                "Missing_Field": "Conclusion on potential applications",
+                "Judgment": "FN",
+                "Reason": "文本的结论部分强调该多功能磁超表面在太赫兹应用系统中具有广阔的应用前景，这一主要结论在提取的 JSON 中未被体现。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1016j.apcata.2018.05.033.json",
+        "metrics": {
+            "TP": 113,
+            "FP": 6,
+            "FN": 5,
+            "precision": 0.9496,
+            "recall": 0.9576,
+            "f1_score": 0.9536
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Product selectivity",
+                "Incorrect_Value": "BCH: 6.1%",
+                "Judgment": "FP",
+                "Reason": "For the MoS2 catalyst, the original text states the selectivity for BCH is 5.1% (Figure 7), not 6.1%. This error is also present in the 'Treated MoS2' and 'Spent MoS2' entries."
+            },
+            {
+                "Incorrect_Field": "Product selectivity",
+                "Incorrect_Value": "Total isomerized products: 3.4%",
+                "Judgment": "FP",
+                "Reason": "For the MoS2-Fe2O3 catalyst, the total selectivity of isomerized products is 7.0% (1.9 + 4.5 + 0.6, according to Figure 7), not 3.4%."
+            },
+            {
+                "Incorrect_Field": "Selectivity of isomerized products",
+                "Incorrect_Value": "Total isomerized products: 6.9%",
+                "Judgment": "FP",
+                "Reason": "For the MoS2-Fe2O3 catalyst, the total selectivity of isomerized products is 7.0% (1.9 + 4.5 + 0.6, according to Figure 8), not 6.9%."
+            },
+            {
+                "Incorrect_Field": "Product selectivity",
+                "Incorrect_Value": "Total isomerized products: 8.5%",
+                "Judgment": "FP",
+                "Reason": "For the MoS2-Fe catalyst, the total selectivity of isomerized products is 5.1% (4.5 + 0.6 + 0.0, according to Figure 7), not 8.5%."
+            },
+            {
+                "Incorrect_Field": "Sigma adsorption of DBT",
+                "Incorrect_Value": "-1.14 eV (S-edge)",
+                "Judgment": "FP",
+                "Reason": "The original text states that -1.14 eV is the formation energy of the DDS pathway intermediate on the S-edge, not the sigma adsorption energy of DBT on the S-edge."
+            },
+            {
+                "Incorrect_Field": "Brim adsorption of DBT",
+                "Incorrect_Value": "-0.88 eV (S-edge)",
+                "Judgment": "FP",
+                "Reason": "The original text states that brim adsorption on the S-edge is 'energetically unfavorable' without providing a specific numerical value of -0.88 eV."
+            },
+            {
+                "Missing_Field": "Highlights",
+                "Judgment": "FN",
+                "Reason": "The text includes a 'Highlights' section summarizing five key findings, which is a crucial overview that is missing from the extracted JSON."
+            },
+            {
+                "Missing_Field": "HDS pathway descriptions",
+                "Judgment": "FN",
+                "Reason": "The text describes the two main HDS pathways (DDS and HYD) and their specific products (DDS produces biphenyl (BP), HYD produces cyclohexylbenzene (CHB) and bicyclohexyl (BCH)). This explanation of the core reaction mechanism is missing."
+            },
+            {
+                "Missing_Field": "Specific role of H2S in BCH production",
+                "Judgment": "FN",
+                "Reason": "The text concludes that H2S is the main participant in the production of the BCH product, a specific and important finding that is not captured in the extracted JSON."
+            },
+            {
+                "Missing_Field": "Oxidation state change as a reason for acid site formation difference",
+                "Judgment": "FN",
+                "Reason": "The text provides a second key reason why H2S creates acid sites more easily than H2: H2S dissociation does not change the oxidation state of neighboring Mo atoms, whereas H2 dissociation does. This critical theoretical explanation is missing."
+            },
+            {
+                "Missing_Field": "Brønsted acid sites",
+                "Judgment": "FN",
+                "Reason": "The text specifically identifies the acid sites created by H2S dissociation as 'Brønsted acid sites.' This specific detail is missing from the extracted content, which only mentions 'acid sites' in general."
+            }
+        ]
+    },
+    {
+        "file_name": "10.1002mop.31455.json",
+        "metrics": {
+            "TP": 62,
+            "FP": 0,
+            "FN": 6,
+            "precision": 1.0,
+            "recall": 0.9118,
+            "f1_score": 0.9538
+        },
+        "verification_details": [
+            {
+                "Missing_Field": "Funding information",
+                "Judgment": "FN",
+                "Reason": "文本明确指出资助来源是上海市自然科学基金（资助号：16ZR1446100），这在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "Authors and Affiliations",
+                "Judgment": "FN",
+                "Reason": "文本列出了作者（Juzheng Wei, Xiao Deng, Xiaofei Xu）及其单位（上海大学），但这些信息在提取内容中缺失了。"
+            },
+            {
+                "Missing_Field": "Keywords",
+                "Judgment": "FN",
+                "Reason": "文本提供了一组关键词（带宽、效率、低剖面、超表面、小型化、贴片天线），这些在提取内容中被遗漏了。"
+            },
+            {
+                "Missing_Field": "Publication information (DOI, Journal, Date)",
+                "Judgment": "FN",
+                "Reason": "文本包括发表详情，如 DOI (10.1002/mop.31455)、期刊 和收到日期，这些是关键元数据，但在提取内容中缺失了。"
+            },
+            {
+                "Missing_Field": "Corresponding author information",
+                "Judgment": "FN",
+                "Reason": "文本将 Xiaofei Xu 标识为通讯作者，并提供了其电子邮件，这是文章元数据的一部分，但在提取内容中被遗漏了。"
+            },
+            {
+                "Missing_Field": "Conventional antenna simulated cross-polarization level",
+                "Judgment": "FN",
+                "Reason": "文本指出传统天线的仿真交叉极化电平约为 -25 dB，这是一个特定的性能指标，在提取内容中缺失了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.111712.813923.json",
+        "metrics": {
+            "TP": 53,
+            "FP": 4,
+            "FN": 5,
+            "precision": 0.9298,
+            "recall": 0.9138,
+            "f1_score": 0.9217
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Core doping",
+                "Incorrect_Value": "Not specified",
+                "Judgment": "FP",
+                "Reason": "原文指出“核心掺杂和波导外延保持不变”，并详细描述了周围各层的掺杂水平，因此并非“未指定”。"
+            },
+            {
+                "Incorrect_Field": "Operating voltage at 298 K",
+                "Incorrect_Value": "19 V",
+                "Judgment": "FP",
+                "Reason": "原文指出在 298 K 时的翻转电压为 16.3 V，但并未指定在 1 A 工作电流下的工作电压为 19 V。"
+            },
+            {
+                "Incorrect_Field": "Lasing spectrum at 0.6 A",
+                "Incorrect_Value": "Single longitudinal mode emission",
+                "Judgment": "FP",
+                "Reason": "原文中显示了光谱图，但并未明确描述其为“单纵模发射”，这是一种推断。"
+            },
+            {
+                "Incorrect_Field": "Average power at 1% duty cycle",
+                "Incorrect_Value": "2.2 W",
+                "Judgment": "FP",
+                "Reason": "原文图 6 显示，在 1% 占空比下的平均功率约为 0.2-0.3 W，而 2.2 W 是在 20% 占空比下实现的。"
+            },
+            {
+                "Missing_Field": "Material system",
+                "Judgment": "FN",
+                "Reason": "原文在摘要中明确指出，量子级联激光器是基于 InP/GaInAs/InAlAs 材料系统，这是关键的基础信息，但未被提取。"
+            },
+            {
+                "Missing_Field": "Growth method for QCL core",
+                "Judgment": "FN",
+                "Reason": "原文在摘要中提到，QCL 核心是使用气源分子束外延法生长的，这是一个关键的制造工艺细节，但未被提取。"
+            },
+            {
+                "Missing_Field": "Record-breaking performance claim",
+                "Judgment": "FN",
+                "Reason": "原文明确指出，36% 和 22% 的壁插效率是“迄今为止报道的所有 QCL 中的最高值”，这是关于研究成果重要性的关键结论，但未被提取。"
+            },
+            {
+                "Missing_Field": "Inability for cw operation at room temperature (long-wavelength QCL)",
+                "Judgment": "FN",
+                "Reason": "原文明确指出，长波长量子级联激光器“无法在室温下以连续波模式工作”，这是一个重要的性能限制，但未被提取。"
+            },
+            {
+                "Missing_Field": "Proposed solution for beam quality (long-wavelength QCL)",
+                "Judgment": "FN",
+                "Reason": "原文提出，光子晶体分布反馈（PCDFB）设计是解决宽脊器件光束质量问题的可行方案，这是一个重要的结论和建议，但未被提取。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1002pssr.202100036.json",
+        "metrics": {
+            "TP": 77,
+            "FP": 0,
+            "FN": 10,
+            "precision": 1.0,
+            "recall": 0.8851,
+            "f1_score": 0.939
+        },
+        "verification_details": [
+            {
+                "Missing_Field": "Graphene Carrier Mobility",
+                "Judgment": "FN",
+                "Reason": "The original text states that the carrier mobility of graphene can reach up to 15 m² V⁻¹ s⁻¹ at room temperature, which is a key material property, but this information is missing from the extracted JSON."
+            },
+            {
+                "Missing_Field": "Comparison with prior work",
+                "Judgment": "FN",
+                "Reason": "The original text provides a detailed comparison of the proposed modulator's performance with previously published single-frequency and dual-frequency modulators (e.g., Yan et al., Li et al., Lei et al.) to contextualize the advancement, but this comparative information is omitted."
+            },
+            {
+                "Missing_Field": "Physical mechanism of PIT",
+                "Judgment": "FN",
+                "Reason": "The text explains that the PIT phenomenon is caused by destructive interference between two bright modes (bright-bright mode theory), which is a core finding, but this mechanism is not described in the extracted JSON."
+            },
+            {
+                "Missing_Field": "Simulation temperature",
+                "Judgment": "FN",
+                "Reason": "The original text specifies that the simulation was conducted at T = 300 K, a critical parameter for the conductivity calculations, but this is missing from the JSON."
+            },
+            {
+                "Missing_Field": "Relationship between Fermi level and bias voltage",
+                "Judgment": "FN",
+                "Reason": "The text provides the formula (Equation 5) linking the Fermi level to the external bias voltage, which is fundamental to the modulation method, but this relationship is not included."
+            },
+            {
+                "Missing_Field": "Effect of Fermi level modulation on Q-factor",
+                "Judgment": "FN",
+                "Reason": "The text makes a key observation that the quality factor (Q) of the PIT window remains almost unchanged when the Fermi level is modulated, a finding that distinguishes it from positional parameter modulation, but this is not captured in the JSON."
+            },
+            {
+                "Missing_Field": "Baseline modulator performance",
+                "Judgment": "FN",
+                "Reason": "The text provides the initial performance metrics for the modulator at a lower carrier mobility (μ=1 m² V⁻¹ s⁻¹), including a maximum MD of 84.02% and a minimum IL of 0.14 dB, which serve as a baseline for the enhancement, but these values are missing."
+            },
+            {
+                "Missing_Field": "Performance comparison table",
+                "Judgment": "FN",
+                "Reason": "The original text includes a comprehensive table (Table 2) comparing the performance of the proposed modulator with other recent research, which is crucial for assessing its competitiveness, but this entire table is omitted."
+            },
+            {
+                "Missing_Field": "Definition of group index",
+                "Judgment": "FN",
+                "Reason": "The text provides the formula (Equation 6) for calculating the group index, a key parameter for the slow-light effect, but this definition is not included in the extracted JSON."
+            },
+            {
+                "Missing_Field": "Funding sources",
+                "Judgment": "FN",
+                "Reason": "The original text lists several funding sources for the research, including the National Natural Science Foundation of China (NSFC), but this important information is completely absent from the JSON."
+            }
+        ]
+    },
+    {
+        "file_name": "10.110922.64574.json",
+        "metrics": {
+            "TP": 188,
+            "FP": 5,
+            "FN": 5,
+            "precision": 0.9741,
+            "recall": 0.9741,
+            "f1_score": 0.9741
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Noise Figure",
+                "Incorrect_Value": "Less than -11 dB to beyond 10 GHz",
+                "Judgment": "FP",
+                "Reason": "原始文本指出该值（小于 -11 dB）对应于 S11（回波损耗），而不是噪声系数。"
+            },
+            {
+                "Incorrect_Field": "Output Power at 1 dB Compression Point",
+                "Incorrect_Value": "9.5 dBm",
+                "Judgment": "FP",
+                "Reason": "原始文本说明了 AMPA（5 dBm）和 AMPC（9.5 dBm）在 1 dB 压缩点时的输出功率，但没有说明 AMPB 的。"
+            },
+            {
+                "Incorrect_Field": "Pulse Response",
+                "Incorrect_Value": "Good eye opening observed",
+                "Judgment": "FP",
+                "Reason": "原始文本为 AMPA（图 18a）和 AMPC（图 18b）提供了脉冲响应图，但没有为 AMPB 提供。"
+            },
+            {
+                "Incorrect_Field": "components",
+                "Incorrect_Value": "{\"material_name\": \"Resistors\", \"role_in_system\": \"Impedance matching\", \"physical_form\": \"Resistive components\", \"properties\": [{\"name\": \"Resistance Value\", \"value\": \"25 Ω\", \"unit\": \"\", \"remark\": \"each resistance component of Resistors\", \"source\": \"Text description\", \"measurement_method\": \"Not specified\"}]}",
+                "Judgment": "FP",
+                "Reason": "原始文本描述 AMPB 使用电阻器作为三路分配器，而 AMPA（并推断 AMPC）使用 FET。为 AMPC 列出电阻器是不正确的。"
+            },
+            {
+                "Incorrect_Field": "Inductance",
+                "Incorrect_Value": "0.5 nH",
+                "Judgment": "FP",
+                "Reason": "原始文本将 0.5 nH 的电感指定为 InGaAs p-i-n 光电二极管等效电路模型的一部分，而不是封装键合线的物理属性。"
+            },
+            {
+                "Missing_Field": "Application Scope of ICs",
+                "Judgment": "FN",
+                "Reason": "文本陈述了一个关键结论，即这些 IC 可用于传输速率超过 7 Gb/s 的光接收器，这一应用范围信息缺失了。"
+            },
+            {
+                "Missing_Field": "Gain Control Mechanism",
+                "Judgment": "FN",
+                "Reason": "文本指明增益是通过控制共源电路的源极偏置来实现的，这一关键机制细节在 JSON 中被忽略了。"
+            },
+            {
+                "Missing_Field": "Target Voltage Gain per Amplifier",
+                "Judgment": "FN",
+                "Reason": "文本提到每个放大器的电压增益设计目标约为 20 dB，这是一个重要的系统架构信息，但在 JSON 中缺失。"
+            },
+            {
+                "Missing_Field": "Source-Follower Inductor Peaking",
+                "Judgment": "FN",
+                "Reason": "文本描述了第三种电感峰化技术，即在源极跟随器的源极加载电感（Ls），但这在 JSON 的峰化技术描述中被遗漏了。"
+            },
+            {
+                "Missing_Field": "Fabrication Process Details",
+                "Judgment": "FN",
+                "Reason": "文本指明了工艺名称（“advanced SAINT”）并描述了几个关键特性（例如，不对称 n+ 层、埋入式 p 层、空气桥），这些是器件技术的基础信息，但在 JSON 中被忽略了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.10631.5048894.json",
+        "metrics": {
+            "TP": 62,
+            "FP": 0,
+            "FN": 4,
+            "precision": 1.0,
+            "recall": 0.9394,
+            "f1_score": 0.9688
+        },
+        "verification_details": [
+            {
+                "Missing_Field": "Target non-uniformity (Lu) parameter",
+                "Judgment": "FN",
+                "Reason": "文本明确指出Design1的目标非均匀性为0.4 dB，Design2为0.1 dB。这是两种设计之间的关键区别，也是论文讨论的核心，但在JSON中缺失了。"
+            },
+            {
+                "Missing_Field": "Minimum waveguide separation between I/O waveguides (dx)",
+                "Judgment": "FN",
+                "Reason": "文本将I/O波导的最小间距确定为3.5 µm，这是一个影响串扰的关键设计参数，但此信息在JSON中缺失。"
+            },
+            {
+                "Missing_Field": "Number of arrayed waveguides (Na)",
+                "Judgment": "FN",
+                "Reason": "文本指出阵列波导数被计算为137，这是AWG的一个基本几何参数，但此值未包含在JSON中。"
+            },
+            {
+                "Missing_Field": "Primary Funding Sources",
+                "Judgment": "FN",
+                "Reason": "文本在致谢部分提到了两个主要资金来源（斯洛伐克研究开发署和奥地利教育科研国际合作署），这是关键的背景信息，但在JSON中缺失了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1002aelm.202100369.json",
+        "metrics": {
+            "TP": 122,
+            "FP": 3,
+            "FN": 7,
+            "precision": 0.976,
+            "recall": 0.9457,
+            "f1_score": 0.9606
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Width of high-voltage electrodes",
+                "Incorrect_Value": "0.4 mm",
+                "Judgment": "FP",
+                "Reason": "原文指出 0.4 mm 是高压电极之间的间隔，而不是电极本身的宽度，宽度为 0.1 mm。"
+            },
+            {
+                "Incorrect_Field": "Electron density increase when bent",
+                "Incorrect_Value": "Maximum rate of 30%",
+                "Judgment": "FP",
+                "Reason": "原文指出 30% 是当模型从凹面变为凸面时电子密度的相对增加率，而不是凹面或凸面模型本身的固有属性。"
+            },
+            {
+                "Incorrect_Field": "Electron temperature decrease when bent",
+                "Incorrect_Value": "Slight decrease",
+                "Judgment": "FP",
+                "Reason": "原文指出电子温度的降低是当模型从凹面变为凸面时的相对变化，而不是凹面或凸面模型本身的固有属性。"
+            },
+            {
+                "Missing_Field": "Applications of the flexible plasma source",
+                "Judgment": "FN",
+                "Reason": "原文提到了几个关键应用，如微生物灭活、伤口愈合、化学沉积和表面改性，这些对于理解该研究的背景和意义至关重要，但在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "Excitation pulse parameters",
+                "Judgment": "FN",
+                "Reason": "原文详细说明了实验中使用的激励脉冲参数，包括脉冲宽度（10 µs）、上升/下降时间（100 ns）和重复频率（1 kHz），这些是理解实验条件的关键信息，但在提取内容中缺失了。"
+            },
+            {
+                "Missing_Field": "Rationale for non-exposed electrode structure",
+                "Judgment": "FN",
+                "Reason": "原文解释了采用非暴露电极结构是为了提高电极的耐久性、稳定性和安全性，这是该设计的一个核心优势，但在提取内容中未被提及。"
+            },
+            {
+                "Missing_Field": "Manufacturing process details",
+                "Judgment": "FN",
+                "Reason": "原文描述了等离子体片的制造过程，包括光刻、热压粘合以及使用的环氧树脂粘合剂等，这些是实现该系统的关键技术细节，但在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "SIW propagation characteristics: starting point and merging",
+                "Judgment": "FN",
+                "Reason": "原文指出 SIW 从高压电极附近开始并向接地电极传播，并且相向传播的 SIW 会在接地电极上方合并，这些是描述 SIW 传播动态的关键发现，但在提取内容中缺失了。"
+            },
+            {
+                "Missing_Field": "Absence of SIWs in negative discharge",
+                "Judgment": "FN",
+                "Reason": "原文明确指出在负放电阶段没有产生 SIW，这是区分正负放电特性的一个重要结论，但在提取内容中未被捕捉。"
+            },
+            {
+                "Missing_Field": "Explanation for SIW propagation speed",
+                "Judgment": "FN",
+                "Reason": "原文解释了 SIW 传播速度较低的原因（均匀电场和重粒子的参与），这有助于深入理解其物理机制，但在提取内容中缺失了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.10631.5011297.json",
+        "metrics": {
+            "TP": 165,
+            "FP": 4,
+            "FN": 3,
+            "precision": 0.9763,
+            "recall": 0.9821,
+            "f1_score": 0.9792
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Structure",
+                "Incorrect_Value": "Homogeneous network of dislocations",
+                "Judgment": "FP",
+                "Reason": "原始文本明确指出，对于同质外延 GaAs 层，'没有有序的位错网络，只有衬底的特征性位错和从衬底贯穿到外延层的位错'，这与提取的值相矛盾。"
+            },
+            {
+                "Incorrect_Field": "Interfacial states",
+                "Incorrect_Value": "Absent",
+                "Judgment": "FP",
+                "Reason": "原始文本明确指出，在 InGaAs/GaAs 和 GaAsSb/GaAs 的异质结界面处观察到了深的施主和受主型界面态。"
+            },
+            {
+                "Incorrect_Field": "Space-charge region thickness",
+                "Incorrect_Value": "About 3.5 μm at 300 K",
+                "Judgment": "FP",
+                "Reason": "原文指出，约 3.5 μm 的空间电荷区厚度是在 GaAs 同质外延结构中测量的，并说明异质结构的特性与此有显著不同。该值被错误地归因于异质结构。"
+            },
+            {
+                "Incorrect_Field": "Space-charge region thickness",
+                "Incorrect_Value": "About 3.5 μm at 300 K",
+                "Judgment": "FP",
+                "Reason": "原文指出，约 3.5 μm 的空间电荷区厚度是在 GaAs 同质外延结构中测量的，并说明异质结构的特性与此有显著不同。该值被错误地归因于异质结构。"
+            },
+            {
+                "Missing_Field": "Deep level defects (HL2, HL5) in GaAs and their parameters",
+                "Judgment": "FN",
+                "Reason": "文本在表 I 中详细列出了在 GaAs 同质外延层中识别出的深能级缺陷 HL2 和 HL5 的关键参数（如激活能、俘获截面和浓度），这些是对比研究的关键数据，但在提取内容中缺失了。"
+            },
+            {
+                "Missing_Field": "Dislocation-related traps (ED1, HD3) in InGaAs/GaAs and their parameters",
+                "Judgment": "FN",
+                "Reason": "文本的核心发现是识别出 InGaAs/GaAs 异质结构中与位错相关的电子陷阱 ED1 和空穴陷阱 HD3 是导致载流子弛豫时间变化的原因，并提供了它们的详细参数（Et, r, Nt），但这些关键信息在提取内容中被完全忽略了。"
+            },
+            {
+                "Missing_Field": "Dislocation-related traps (ED1, HD3) in GaAsSb/GaAs and their parameters",
+                "Judgment": "FN",
+                "Reason": "文本的核心发现是识别出 GaAsSb/GaAs 异质结构中与位错相关的电子陷阱 ED1 和空穴陷阱 HD3 是导致载流子弛豫时间变化的原因，并提供了它们的详细参数（Et, r, Nt），但这些关键信息在提取内容中被完全忽略了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1002smll.201300134.json",
+        "metrics": {
+            "TP": 66,
+            "FP": 4,
+            "FN": 6,
+            "precision": 0.9429,
+            "recall": 0.9167,
+            "f1_score": 0.9296
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Work Function",
+                "Incorrect_Value": "~4.6 eV",
+                "Judgment": "FP",
+                "Reason": "原文指出约 4.6 eV 的功函数是石墨烯 的属性，而不是 MoS₂ 的。该属性在 JSON 中被错误地归于 MoS₂。"
+            },
+            {
+                "Incorrect_Field": "Schottky Barrier Height",
+                "Incorrect_Value": "22 ± 7 meV",
+                "Judgment": "FP",
+                "Reason": "原文指出 22 ± 7 meV 的肖特基势垒高度是在 SiO₂/Si 衬底器件上测量的，而非 PET 衬底器件。提取内容错误地将此值归于 PET 器件的属性和性能指标。"
+            },
+            {
+                "Incorrect_Field": "Temperature-dependent Field-effect Mobility",
+                "Incorrect_Value": "~1.3 cm² V⁻¹ s⁻¹ at 200 K",
+                "Judgment": "FP",
+                "Reason": "原文指出约 1.3 cm² V⁻¹ s⁻¹ 的温度依赖性迁移率是在 SiO₂/Si 衬底器件上测量的，而非 PET 衬底器件。"
+            },
+            {
+                "Incorrect_Field": "Temperature-dependent Schottky Barrier Height",
+                "Incorrect_Value": "22 ± 7 meV",
+                "Judgment": "FP",
+                "Reason": "原文指出 22 ± 7 meV 的温度依赖性肖特基势垒高度是在 SiO₂/Si 衬底器件上测量的，而非 PET 衬底器件。"
+            },
+            {
+                "Missing_Field": "Drain Current-Drain Voltage Characteristics for SiO₂/Si device",
+                "Judgment": "FN",
+                "Reason": "原文描述了 SiO₂/Si 器件的 I_DS-V_DS 曲线具有线性和饱和区，但此信息未在提取内容中体现。"
+            },
+            {
+                "Missing_Field": "Mobility Improvement Suggestions",
+                "Judgment": "FN",
+                "Reason": "原文中提出了通过优化 MoS₂ 厚度 (6-10 nm) 和使用高 k 介电层 (如 Al₂O₃) 来提高迁移率的建议，这是一个关键的讨论点，但被遗漏了。"
+            },
+            {
+                "Missing_Field": "Explanation for Low Schottky Barrier",
+                "Judgment": "FN",
+                "Reason": "原文解释了低肖特基势垒 (22 meV) 远低于简单计算值 (300 meV) 的原因，将其归因于良好的粘附性、门偏压电掺杂或界面陷阱态，这一关键解释被遗漏了。"
+            },
+            {
+                "Missing_Field": "Mechanism for Temperature-Dependent Mobility",
+                "Judgment": "FN",
+                "Reason": "原文解释了温度依赖性迁移率变化的原因：低温下由电离杂质散射引起，高温下由光学和声学声子散射引起，这一关键机理被遗漏了。"
+            },
+            {
+                "Missing_Field": "Funding Information",
+                "Judgment": "FN",
+                "Reason": "原文在致谢部分明确提到了研究的资助方，包括韩国国家研究基金会 (NRF) 和韩国基础科学研究所 (KBSI) 的资助信息，这是重要的背景信息，但被遗漏了。"
+            },
+            {
+                "Missing_Field": "DOI",
+                "Judgment": "FN",
+                "Reason": "原文提供了文献的 DOI (10.1002/smll.201300134)，这是识别和引用该文献的关键信息，但被遗漏了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1002adom.202001802.json",
+        "metrics": {
+            "TP": 36,
+            "FP": 0,
+            "FN": 4,
+            "precision": 1.0,
+            "recall": 0.9,
+            "f1_score": 0.9474
+        },
+        "verification_details": [
+            {
+                "Missing_Field": "Self-Driven Nature",
+                "Judgment": "FN",
+                "Reason": "原文的核心主题是器件是自驱动的，无需外部偏压即可运行，这是相对于先前技术的一个关键优势。这一概念在 JSON 中缺失。"
+            },
+            {
+                "Missing_Field": "Logic Device Functionality",
+                "Judgment": "FN",
+                "Reason": "文本描述了器件作为逻辑元件的功能，将光输入转换为电输出，并由栅极电压控制，相当于一个光电二极管和一个传输门的集成。这种功能性描述在 JSON 中缺失。"
+            },
+            {
+                "Missing_Field": "Performance Comparison with Other Devices",
+                "Judgment": "FN",
+                "Reason": "文本包含一个关键比较（图 5a），将该器件的输出暗电流和开关时间与基于 SOI、GaN 和 CNT 等材料的其他已报道的光电逻辑器件进行对比，以突显其优越性。这一比较在 JSON 中缺失。"
+            },
+            {
+                "Missing_Field": "Logic State Definitions",
+                "Judgment": "FN",
+                "Reason": "文本明确定义了逻辑运算条件：输入（光开/关）、控制（VG = 0V/-60V）和输出（ID < 10^-12 A / > 10^-12 A）状态。这些定义对于理解器件的逻辑功能至关重要，但在 JSON 中缺失。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1039c0jm00611d.json",
+        "metrics": {
+            "TP": 187,
+            "FP": 3,
+            "FN": 6,
+            "precision": 0.9842,
+            "recall": 0.9689,
+            "f1_score": 0.9765
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Stability",
+                "Incorrect_Value": "Stable in common solvents like ethanol and chlorobenzene",
+                "Judgment": "FP",
+                "Reason": "原始文本描述 CuInS2 量子点在乙醇和氯苯等常见溶剂中‘溶解性良好’，而不是‘稳定’。"
+            },
+            {
+                "Incorrect_Field": "system_name",
+                "Incorrect_Value": "MEH-PPV/CuInS2-QDs Blends (R=1/6)",
+                "Judgment": "FP",
+                "Reason": "原始文本中从未提及 MEH-PPV 与 CuInS2 量子点重量比为 1/6 的混合物。"
+            },
+            {
+                "Incorrect_Field": "Weight Percentage",
+                "Incorrect_Value": "20%",
+                "Judgment": "FP",
+                "Reason": "对于 R=1/5 的混合物，原始文本明确指出 CuInS2 量子点的浓度约为 83 wt%，而提取的 JSON 中为 20%。"
+            },
+            {
+                "Missing_Field": "Bromine in XPS survey spectrum",
+                "Judgment": "FN",
+                "Reason": "原始文本指出 XPS 调查谱中存在 Br3d 和 Br3p 峰，表明存在微量的 HSPh 或 –SPh 基团，但该信息在提取内容中被遗漏。"
+            },
+            {
+                "Missing_Field": "Growth mechanism of CuInS2 QDs",
+                "Judgment": "FN",
+                "Reason": "原始文本详细阐述了 CuInS2 量子点的生长机理，涉及中间体 CuIn(SPh)n 和 NaCuInS(SPh)m 的形成与分解，这是一个核心发现，但在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "TBP treatment procedure",
+                "Judgment": "FN",
+                "Reason": "原始文本描述了制备 TBP 处理过的量子点的具体步骤（在 TBP 的乙醇溶液中 60-80°C 下处理 16 小时），这一关键实验信息在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "Solar cell device architecture",
+                "Judgment": "FN",
+                "Reason": "原始文本详细描述了太阳能电池的结构（ITO/PEDOT:PSS/活性层/CuInS2 空穴阻挡层/LiF/Al），这对于理解器件至关重要，但在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "Solar cell measurement conditions",
+                "Judgment": "FN",
+                "Reason": "原始文本指明了太阳能电池性能是在单色光（470 nm，15.85 mW/cm²）照射下测量的，这些关键的条件信息在提取内容中被忽略了。"
+            },
+            {
+                "Missing_Field": "Charge transfer mechanisms in the solar cell",
+                "Judgment": "FN",
+                "Reason": "原始文本描述了太阳能电池中的三种电荷/激子转移过程，以解释其工作原理，但这一主要结论在提取内容中被忽略了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1016j.surfcoat.2007.07.061.json",
+        "metrics": {
+            "TP": 66,
+            "FP": 1,
+            "FN": 2,
+            "precision": 0.9851,
+            "recall": 0.9706,
+            "f1_score": 0.9778
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "Young's Modulus of Polyimide film",
+                "Incorrect_Value": "3.5 GPa",
+                "Judgment": "FP",
+                "Reason": "原始文本指出聚酰亚胺的应力-应变曲线由 DUPONT 提供，但未明确说明杨氏模量的数值。"
+            },
+            {
+                "Missing_Field": "Peel test angle",
+                "Judgment": "FN",
+                "Reason": "文本明确说明剥离测试是在 90° 角下进行的，这是一个关键的实验参数，但在提取内容中被遗漏了。"
+            },
+            {
+                "Missing_Field": "Auger electron analysis result",
+                "Judgment": "FN",
+                "Reason": "文本提到俄歇电子分析检测到了铬，这有力地证明了裂纹是沿着金属层与聚酰亚胺薄膜之间的界面扩展。这一关键的验证信息在提取内容中被忽略了。"
+            }
+        ]
+    },
+    {
+        "file_name": "10.1016j.matlet.2018.11.096.json",
+        "metrics": {
+            "TP": 163,
+            "FP": 1,
+            "FN": 1,
+            "precision": 0.9939,
+            "recall": 0.9939,
+            "f1_score": 0.9939
+        },
+        "verification_details": [
+            {
+                "Incorrect_Field": "In-plane thermal conductivity",
+                "Incorrect_Value": "694.486 ± 6.993 W m⁻¹ K⁻¹",
+                "Judgment": "FP",
+                "Reason": "原始文本的图3指出，g-SGO薄膜的热导率为 694.468 ± 6.993 W m⁻¹ K⁻¹，而非 694.486 ± 6.993 W m⁻¹ K⁻¹。"
+            },
+            {
+                "Missing_Field": "In-plane thermal conductivity of g-SGO/PI film",
+                "Judgment": "FN",
+                "Reason": "文本指出 g-SGO/PI 薄膜的热导率为 886.922 ± 9.948 W m⁻¹ K⁻¹，这是一个用于计算和比较性能提升（18.8%）的关键数据点，但在提取的JSON中缺失。"
+            }
+        ]
+    }
+]
