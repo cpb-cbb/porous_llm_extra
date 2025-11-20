@@ -1,10 +1,6 @@
-# 运行抽取 workflow
+# 运行抽取 workflow,多个样本多次运行不同提取任务
 import shutil
-from servers.agents.ele_chem_extract import ele_chem_extra
-from servers.agents.pore_parameter_extract import micro_feature_extra
-from servers.agents.proceess_extract import process_extra
-from servers.agents.Validation_Agent import verifie_agent
-from servers.agents.pre_judge import prejudge
+from servers.agents.manager import run_agent
 from servers.utils import TextProcess
 from servers.utils.tools import merge_agent_outputs_simple
 import json
@@ -26,11 +22,11 @@ def loop_extract(agent_name, text_input, max_iter: int = 3):
     modification_log = []  # 记录所有修改
     
     if agent_name == "process_extraction":
-        current_answer = process_extra(text_input)
+        current_answer = run_agent("process", text_input=text_input)
     elif agent_name == "micro_feature_extraction":
-        current_answer = micro_feature_extra(text_input)
+        current_answer = run_agent("micro_feature", text_input=text_input)
     elif agent_name == "ele_chem_extraction":
-        current_answer = ele_chem_extra(text_input)
+        current_answer = run_agent("electro_chem", text_input=text_input)
     else:
         raise ValueError(f"未知的 agent_name: {agent_name}")
     
@@ -53,7 +49,7 @@ def loop_extract(agent_name, text_input, max_iter: int = 3):
     print(f"agent_name: {agent_name}提取成功，开始验证...")
     
     for iteration in range(1, max_iter + 1):
-        judge = verifie_agent(text_input=text_input, answer=current_answer)
+        judge = run_agent("verifier", text_input=text_input, answer=current_answer)
 
         # 验证通过（约定返回 "T"）
         if isinstance(judge, str) and judge.strip() == "T":
@@ -108,7 +104,7 @@ def run_extraction_workflow(input_txt_path, output_json_path):
     text_input = processor.read_json(input_txt_path) 
     print(f"读取输入文本，开始预判断...")
     # 预判断是否相关，及提取样本列表
-    name_list_str = prejudge(text_input)
+    name_list_str = run_agent("pre_judge", text_input=text_input)
     name_dict=json_repair.loads(name_list_str)
     name_list = name_dict.get("samples", [])
     if not name_list:

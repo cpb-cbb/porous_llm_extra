@@ -78,10 +78,9 @@ def process_directory(input_dir, output_dir, max_workers=None):
 
 if __name__ == "__main__":
     # 单文件示例；如需批量处理将其设为 None
-    input_txt_path = None
+    input_txt_path ="/Volumes/mac_outstore/毕业/jsol文献/biomass_super_2000/core_json/10.1016_j.carbon.2020.07.017.json"
     output_json_path = "/Volumes/mac_outstore/毕业/测试集文献/data/extracted_output.json"
-    llm_engine = settings.llm_provider  # 可选 "zhipu" 或 "gemini"
-    print(f"使用的 LLM 引擎: {llm_engine}, 版本: {settings.llm_model}")
+
     if input_txt_path:
         if not os.path.exists(os.path.dirname(output_json_path)):
             os.makedirs(os.path.dirname(output_json_path))
@@ -92,6 +91,5 @@ if __name__ == "__main__":
             print(f"抽取结果已保存到 {output_json_path}。")
     else:
         input_dir = "/Volumes/mac_outstore/毕业/jsol文献/biomass_super_2000/filtered_json"
-        output_dir = os.path.join(input_dir, llm_engine)
         max_workers = 10
-        process_directory(input_dir, output_dir, max_workers=max_workers)
+        process_directory(input_dir, max_workers=max_workers)
