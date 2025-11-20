@@ -226,10 +226,9 @@ def calculate_metrics(verification_list: list, total_extracted_facts: int) -> di
     # 计算召回率: TP / (TP + FN)
     # (TP + FN) 是所有应该被提取的真实结果数量，即 total_extracted_facts
     if total_extracted_facts > 0:
-        recall = tp_count /(tp_count + fn_count)
+        recall = tp_count /(total_extracted_facts)
     else:
         recall = 0.0
-
     # 计算 F1 分数
     if (precision + recall) > 0:
         f1_score = 2 * (precision * recall) / (precision + recall)

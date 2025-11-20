@@ -319,11 +319,7 @@ NER_EVALUE_PROMPT_CN="""
     "Judgment": "FP",
     "Reason": "原始文本中声明的弯曲模量是 72.0 ± 8.5 GPa。"
   },
-  {
-    "Missing_Field": "Primary Funding Source",
-    "Judgment": "FN",
-    "Reason": "文本提到了研究的主要资金来源是国家科学基金会，但这在提取内容中被忽略了。"
-  }
+
 ]
 
 关于无差异情况的关键规则 (Critical Rule for No Discrepancies):
