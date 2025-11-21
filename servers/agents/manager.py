@@ -11,6 +11,7 @@ from servers.utils.prompts_en import (
     prompt_1_4, # Electro Chemical
     prompt_batch_verifier_and_corrector
 )
+from servers.utils import gener_prompt 
 from core.config import settings
 
 class AgentType(Enum):
@@ -19,7 +20,11 @@ class AgentType(Enum):
     MICRO_FEATURE = "micro_feature"
     ELECTRO_CHEM = "electro_chem"
     VERIFIER = "verifier"
-
+   # 新增通用 Agent 类型
+    GEN_PRE_JUDGE = "gen_pre_judge"
+    GEN_PROCESS = "gen_process"
+    GEN_MICRO_FEATURE = "gen_micro_feature"
+    GEN_PERFORMANCE = "gen_performance"
 # 配置字典：定义每个 Agent 类型的 System Prompt 和 User Template
 AGENT_CONFIG = {
     AgentType.PRE_JUDGE: {
@@ -43,14 +48,32 @@ AGENT_CONFIG = {
     AgentType.VERIFIER: {
         "class": BatchVerificationAgent,
         "system_prompt": prompt_batch_verifier_and_corrector,
-    }
+    },
+    # 新增通用 Agent 配置
+    AgentType.GEN_PRE_JUDGE: {
+        "class": StandardExtractionAgent,
+        "system_prompt": gener_prompt.prompt_1_1,
+        "message_template": "Original Text:\n{text_input}"
+    },
+    AgentType.GEN_PROCESS: {
+        "class": StandardExtractionAgent,
+        "system_prompt": gener_prompt.prompt_1_2,
+    },
+    AgentType.GEN_MICRO_FEATURE: {
+        "class": StandardExtractionAgent,
+        "system_prompt": gener_prompt.prompt_1_3,
+    },
+    AgentType.GEN_PERFORMANCE: {
+        "class": StandardExtractionAgent,
+        "system_prompt": gener_prompt.prompt_1_4,
+    },
 }
 
 class AgentFactory:
     _instances: dict[AgentType, Any] = {}
 
     @classmethod
-    def get_agent(cls, agent_type: AgentType | str):
+    def get_agent(cls, agent_type: AgentType | str,**kwargs):
         """
         单例模式获取 Agent 实例。
         """
@@ -78,7 +101,8 @@ class AgentFactory:
             "top_p": settings.top_p,
             "max_tokens": settings.max_tokens,
         }
-        
+        # 若kwargs中有相关参数，进行覆盖
+        init_kwargs.update(kwargs)
         # 添加 base_url (如果配置了的话)
         if settings.llm_base_url:
             init_kwargs["base_url"] = settings.llm_base_url
