@@ -29,7 +29,7 @@ class GeneralLiteratureWorkflow:
         logger.info("Step 1: Pre-judging document...")
         # 1. 预判断与样本识别
         try:
-            pre_judge_response = self.pre_judge_agent.run(doc_text)
+            pre_judge_response = self.pre_judge_agent.run(text_input=doc_text)
             logger.info(f"Pre-judge response: {pre_judge_response}")
             
             if "不符合要求" in pre_judge_response:
@@ -60,7 +60,7 @@ class GeneralLiteratureWorkflow:
         logger.info("Step 2: Extracting experimental process...")
         raw_process_data = None
         try:
-            raw_process_data = self.process_agent.run(context_input)
+            raw_process_data = self.process_agent.run(text_input=context_input)
         except Exception as e:
             logger.error(f"Error in process extraction: {e}")
 
@@ -68,7 +68,7 @@ class GeneralLiteratureWorkflow:
         logger.info("Step 3: Extracting micro-features...")
         raw_micro_data = None
         try:
-            raw_micro_data = self.micro_feature_agent.run(context_input)
+            raw_micro_data = self.micro_feature_agent.run(text_input=context_input)
         except Exception as e:
             logger.error(f"Error in micro-feature extraction: {e}")
 
@@ -76,7 +76,7 @@ class GeneralLiteratureWorkflow:
         logger.info("Step 4: Extracting performance metrics...")
         raw_perf_data = None
         try:
-            raw_perf_data = self.performance_agent.run(context_input)
+            raw_perf_data = self.performance_agent.run(text_input=context_input)
         except Exception as e:
             logger.error(f"Error in performance extraction: {e}")
 

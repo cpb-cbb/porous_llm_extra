@@ -75,7 +75,7 @@ class AgentFactory:
     @classmethod
     def get_agent(cls, agent_type: AgentType | str,**kwargs):
         """
-        单例模式获取 Agent 实例。
+        单例模式获取 Agent 实例，可传入覆盖的初始化参数。
         """
         if isinstance(agent_type, str):
             try:
