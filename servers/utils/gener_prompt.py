@@ -1,234 +1,204 @@
-# 这个脚本是用来管理通用材料科学文献的生成的提示词模块
+# --------------------------------------------------------------------------------
+# 模块 1：文献筛选与实体识别 (Screening & Entity Recognition)
+# --------------------------------------------------------------------------------
+# 优化点：
+# 1. 移除了纯生物医学（临床、病例）的干扰词，聚焦于材料体系。
+# 2. 建立了严格的命名优先级：化学式 > 作者代号 > 泛称。
+# 3. 增加了对“纯理论计算”文献的排除逻辑。
 
 prompt_1_1 = """
-角色设定：实验科学文献分析专家
-任务：严格按步骤分析文献，判断是否为实验性研究并提取核心实验对象。
+角色设定：材料科学文献筛选与实体识别专家
+任务：分析文献是否为实验性材料研究，并提取核心材料实体。
+
 提取流程：
-1.  **文献类型判断**：
-    * 仔细阅读文献摘要、方法（Methodology）和结果（Results）部分。
-    * 该文献是否包含**具体的实验操作、数据采集、样本分析或临床试验**？
-    * 如果否（如纯综述、纯理论推导、观点文章），直接返回：“该文献不符合要求。”
-2.  **实验对象/样本识别**：
-    * 如果是，请识别文献中重点研究的**实验组、样本、模型或病例组**。
-    * 列出这些对象的**确切名称或标识符**（例如：Sample-A, Control Group, HeLa cells, Cohort-1）。
+1.  **文献类型判断 (Type Classification)**：
+    * 仔细阅读摘要、实验部分（Experimental Section）。
+    * **排除**：纯综述（Reviews）、纯理论计算（如仅有DFT/MD模拟无实验验证）、纯观点文章。
+    * **确认**：文献必须包含具体的材料制备、合成、表征或性能测试实验。
+    * 如果否，直接返回：“该文献不符合要求。”
+
+2.  **核心实验对象识别 (Entity Extraction)**：
+    * 识别文献中重点制备或研究的**具体材料体系**。
+    * **命名优先级规则（由高到低）**：
+        1.  **具体的化学式或材料缩写**（推荐）：例如 "Ni-MOF", "g-C3N4/TiO2", "LiFePO4", "MXene-Ti3C2"。
+        2.  **作者定义的具体样本代号**（仅当全名过长时）：例如 "S-800", "N-C-5", "Sample-A"。
+        3.  **泛称**（尽量避免）：仅在文中未提供上述名称时使用，如 "Modified Electrode", "Pristine Material"。
+    * **区分组别**：区分改性组（Modified/Composite）与对照组（Control/Pristine/Raw）。
+
 3.  **输出格式**：
-    * 如果相关，输出一个包含所有识别出的对象名称的列表。
-    * 格式：`样本/组别列表：[名称1, 名称2, ...]`
+    * 格式：`样本/组别列表：[材料名1, 材料名2, ...]`
 
 注意事项：
-    * 仅识别文献中**实际进行实验或数据分析**的具体对象。
-    * 确保名称准确无误，与文献原文保持一致。
+    * 严禁自行创造缩写，必须忠实于原文。
+    * 忽略仅在引言中提及但未实际进行实验的材料。
 """
-# 合成方法，实验方法等提取提示词
+
+# --------------------------------------------------------------------------------
+# 模块 2：合成与制备工艺 (Synthesis & Preparation)
+# --------------------------------------------------------------------------------
+# 优化点：
+# 1. 将“原料”细分为“前驱体”和“溶剂/添加剂”，这对化学合成至关重要。
+# 2. 增加了“Method_Type”字段，用于捕捉总体方法（如水热、CVD）。
+# 3. 在步骤中强制提取“气氛（Atmosphere）”和“升温速率”等关键参数。
+
 prompt_1_2 = """
-角色设定：通用实验方法与过程提取专家
-任务：针对给定的样本或实验组，从文献中提取详细的实验步骤、制备方法或处理流程，并将其转化为结构化的JSON格式。
-输入：
-*   文献全文（包括正文、补充材料）。
-*   目标样本/组别列表：`[名称1, 名称2, ...]`
+角色设定：材料合成与制备工艺提取专家
+任务：从文献中提取目标材料的详细合成步骤与制备工艺，转化为结构化JSON。
+输入：文献全文（重点关注 Experimental Section）、目标样本列表。
 
 提取流程：
 
-1.  **识别关键要素 (Key Elements)**：
-    *   **原料/试剂/对象**：列出实验中使用的核心化学品、原材料、生物样本（如细胞系、动物模型）或临床受试者。
-    *   **设备/仪器**：列出关键的实验设备（如离心机、反应釜、PCR仪）。
-    *   **关键配比/剂量**：提取影响实验结果的关键变量（如摩尔比、给药剂量、掺杂浓度等）。
+1.  **识别总体策略 (Synthesis Strategy)**：
+    * 判断该材料的主要制备方法（例如：Hydrothermal（水热法）、Sol-gel（溶胶-凝胶）、CVD（化学气相沉积）、Solid-state Sintering（固相烧结）、Electrospinning（静电纺丝）等）。
 
-2.  **描述实验流程 (Process Flow)**：
-    *   将实验过程分解为**按时间顺序排列的步骤**。
-    *   对于每一步，提取核心操作和条件。通用参数包括但不限于：
-        *   `step_name`: 步骤名称（例如：“合成”、“培养”、“热处理”、“离心”、“PCR扩增”、“临床干预”）。
-        *   `conditions`: 具体的实验条件字典（如 {"Temperature": "800°C", "Time": "2h", "Dosage": "10mg/kg", "Speed": "1000rpm"}）。
-        *   `details`: 操作细节描述（例如：“在氩气保护下搅拌”、“腹腔注射给药”、“使用共聚焦显微镜观察”）。
+2.  **关键要素细分 (Key Elements)**：
+    * **Precursors（前驱体）**：核心金属盐、有机配体、单体、基础材料。
+    * **Solvents/Additives（溶剂/添加剂）**：溶剂、表面活性剂（Surfactants）、矿化剂、模板剂。
+    * **Equipment（设备）**：反应釜（Autoclave）、管式炉（Tube furnace）、手套箱等。
 
-输出格式示例：
-*   生成一个JSON对象，键为样本/组别名称。
-*   如果未提及某项信息，使用 `null`。
+3.  **制备流程 (Process Flow)**：
+    * 按时间顺序分解步骤。针对每一步，提取以下信息：
+        * `step_type`: 步骤类型（Dissolution/Mixing, Reaction, Washing, Drying, Annealing/Calcination, Activation）。
+        * `conditions`: 关键参数字典。**重点关注**：Temperature（温度）, Time（时间）, Atmosphere（气氛 - Air/N2/Ar/H2）, Heating Rate（升温速率）, pH值。
+        * `details`: 简练的操作描述。
 
+输出格式示例（JSON）：
 ```json
 {
-    "Sample-A": {
+    "Ni-MOF": {
+        "Method_Type": "Hydrothermal",
         "Key_Elements": {
-            "Materials_Subjects": ["Raw Material X", "Reagent Y", "HeLa Cells"],
-            "Equipment": ["Centrifuge", "Microscope"],
-            "Ratios_Dosages": ["Ratio X:Y = 1:2", "Dosage: 5 mg/kg"]
+            "Precursors": ["Ni(NO3)2·6H2O", "Terephthalic acid"],
+            "Solvents_Additives": ["DMF", "Ethanol"],
+            "Equipment": ["Teflon-lined autoclave"]
         },
         "Process_Flow": [
             {
-                "step_name": "Preparation/Pre-treatment",
-                "conditions": {"Temperature": "25°C", "Time": "30 min"},
-                "details": "Mixed reagent Y with raw material X under stirring."
+                "step_type": "Dissolution",
+                "conditions": {"Temperature": "RT", "Time": "30 min"},
+                "details": "Dissolved precursors in mixed solvent under stirring."
             },
             {
-                "step_name": "Main Treatment",
-                "conditions": {"Temperature": "37°C", "CO2": "5%"},
-                "details": "Incubated cells with the mixture."
+                "step_type": "Reaction",
+                "conditions": {"Temperature": "120°C", "Time": "24h"},
+                "details": "Heated in an autoclave."
             }
         ]
-    },
-    "Control Group": {
-         "..."
     }
 }
+```
 """
 
-# 结构属性提取提示词
-prompt_1_3 = """
-角色设定：实验结构与微观特征分析专家
-任务：针对给定的样本或实验组，从文献中提取其物理结构、微观形貌或生物学特征描述，并转化为结构化的JSON格式。
+# --------------------------------------------------------------------------------
+# 模块 3：结构与微观表征 (Structure & Characterization)
+# --------------------------------------------------------------------------------
+# 优化点：
+# 1. 引入“证据关联（Evidence Linking）”：结构特征必须与表征手段（SEM/XRD/XPS）绑定。
+# 2. 强调“定量数据”：对于尺寸、晶格间距等，强制要求提取数值和单位。
+# 3. 增加了“Defects/Surface”字段，这在催化/电池材料中很重要。
 
-输入：
-*   文献全文（重点关注结果与讨论部分，以及图表说明）。
-*   目标样本/组别列表：`[名称1, 名称2, ...]`
+prompt_1_3 = """
+角色设定：材料微观结构与表征分析专家
+任务：提取材料的物理化学结构特征，并将特征与相应的表征手段（Evidence）关联。
+输入：文献全文（重点关注 Results & Discussion, Figure Captions）、目标样本列表。
 
 提取流程：
 
-1.  **提取结构特征 (Structural Features)**：
-    *   **形貌/形态 (Morphology)**：描述样本的形状、表面特征（例如：“纳米球”、“多孔结构”、“纤维状”、“细胞形态完整”、“组织坏死”）。
-    *   **尺寸/规格 (Dimensions)**：提取具体的尺寸数据（例如：粒径、孔径、层厚、肿瘤体积）。需包含数值和单位。
-    *   **晶体/分子结构 (Crystal/Molecular Structure)**：提取晶相、晶格参数、分子排列或化学键合状态（例如：“FCC结构”、“非晶态”、“蛋白质折叠”、“官能团”）。
-    *   **组成分布 (Composition Distribution)**：描述元素分布、相分布或细胞分布情况（例如：“均匀分布”、“核壳结构”、“局部聚集”）。
+1.  **形貌与尺寸 (Morphology & Dimensions)**：
+    * 描述：形状（纳米线/片/球/管）、表面状态（粗糙/多孔/核壳结构）。
+    * 定量：粒径、层厚、孔径、比表面积（BET）。**必须包含数值和单位**。
+    * 证据：SEM, TEM, AFM, BET。
 
-2.  **关联表征手段 (Characterization Methods)**：
-    *   指出上述特征是通过什么手段测得的（例如：SEM, TEM, XRD, FTIR, MRI, CT）。
+2.  **晶体与化学结构 (Crystal & Chemical Structure)**：
+    * 晶相：物相组成（Phase）、晶格条纹间距（Lattice spacing）、晶面（Crystal plane）。
+    * 化学环境：价态、官能团、化学键。
+    * 证据：XRD, HRTEM, SAED, XPS, FTIR, Raman。
 
-输出格式示例：
-*   生成一个JSON对象，键为样本/组别名称。
+3.  **元素分布与缺陷 (Composition & Defects)**：
+    * 分布：均匀分布、元素偏析、掺杂位置。
+    * 缺陷：氧空位、晶格畸变。
+    * 证据：EDS/Mapping, EPR, XAFS。
 
+输出格式示例（JSON）：
 ```json
 {
-    "Sample-A": {
-        "Morphology": "Spherical nanoparticles with rough surface",
-        "Dimensions": {
-            "Diameter": "50-100 nm",
-            "Pore_Size": "2-5 nm"
+    "g-C3N4/TiO2": {
+        "Morphology_Dimensions": {
+            "Description": "2D nanosheets decorated with 0D nanoparticles",
+            "Size_Data": ["TiO2 diameter: 20-30 nm", "g-C3N4 thickness: ~4 nm"],
+            "Evidence": "TEM, AFM"
         },
-        "Structure_Phase": "Anatase TiO2 phase",
-        "Composition_Distribution": "Uniform distribution of C and N elements",
-        "Characterization_Methods": ["SEM", "TEM", "XRD"]
-    },
-    "Control Group": {
-         "..."
+        "Crystal_Structure": {
+            "Phase": "Anatase TiO2 and Graphitic C3N4",
+            "Lattice_Spacing": "0.35 nm (101 plane of TiO2)",
+            "Evidence": "XRD, HRTEM"
+        },
+        "Chemical_State": {
+            "Surface_Chemistry": "Formation of Ti-O-C bonds",
+            "Evidence": "XPS (O 1s spectra)"
+        }
     }
 }
-
-
-输出要求：
-请仅输出最终的JSON格式结果。不要包含任何解释性文字。
+```
 """
 
+# --------------------------------------------------------------------------------
+# 模块 4：性能评估 (Performance Evaluation)
+# --------------------------------------------------------------------------------
+# 优化点：
+# 1. 增加了“Application_Field”以明确上下文（是电池还是催化？）。
+# 2. 增加了“Comparison”字段：明确要求提取该材料相对于对照组的性能提升。
+# 3. 强制区分“Value”（数值）、“Unit”（单位）和“Error”（误差）。
+
 prompt_1_4 = """
-角色设定：实验性能与功效评估专家
-任务：针对给定的样本或实验组，从文献中提取其关键性能指标、测试结果或生物学功效，并转化为结构化的JSON格式。
+角色设定：材料性能评估与数据提取专家
+任务：提取材料的关键性能指标（KPIs），并关联测试条件与对比数据。
+输入：文献全文（关注 Results, Table, Conclusion）、目标样本列表。
 
-输入：
-
-文献全文（重点关注结果、讨论及结论部分）。
-目标样本/组别列表：[名称1, 名称2, ...]
 提取流程：
 
-识别性能类别 (Performance Categories)：
+1.  **应用领域识别 (Application)**：
+    * 明确该材料的应用场景（如：Lithium-ion Battery, HER Electrocatalysis, Photodegradation, Tensile Strength）。
 
-根据文献领域，识别关键性能指标。例如：
-材料/化学：比表面积、电导率、催化活性、机械强度、吸附容量等。
-生物/医学：细胞存活率、IC50值、肿瘤抑制率、基因表达水平、免疫响应等。
-提取具体数据 (Data Extraction)：
+2.  **关键指标提取 (KPI Extraction)**：
+    * 提取该领域的核心指标（如：比容量、循环寿命、过电势、降解率、杨氏模量）。
+    * **格式要求**：
+        * `Metric`: 指标名称。
+        * `Value`: 具体数值。
+        * `Unit`: 单位。
+        * `Error`: 误差范围/标准差（如有，否则为 null）。
 
-指标名称 (Metric)：性能的具体名称。
-数值与单位 (Value & Unit)：提取具体的测试结果数值及单位。如果是范围或误差（±），请一并保留。
-测试条件 (Test Conditions)：该性能是在什么条件下测得的（例如：“在pH 7下”、“电流密度10 mA/cm²”、“给药后24小时”）。
-输出格式示例：
-生成一个JSON对象，键为样本/组别名称。
-将性能指标组织在一个列表中。
+3.  **测试条件绑定 (Test Conditions)**：
+    * 该数据是在何种条件下获得的？（如：电流密度 1 A/g, 光照 AM 1.5G, pH 7, 循环100圈后）。
+
+4.  **性能对比 (Comparison)**：
+    * 如果文中提及，提取该样本相对于对照组（Control）的性能提升描述（如 "2.5 times higher than pure TiO2"）。
+
+输出格式示例（JSON）：
+```json
 {
-    "Sample-A": {
-        "Performance_Metrics": [
+    "Sample-Optimized": {
+        "Application_Field": "Electrocatalysis (HER)",
+        "Performance_Data": [
             {
-                "Metric": "Specific Surface Area (BET)",
-                "Value": "1200 m²/g",
-                "Conditions": "N2 adsorption at 77K"
+                "Metric": "Overpotential",
+                "Value": 120,
+                "Unit": "mV",
+                "Error": null,
+                "Condition": "at 10 mA/cm², 0.5 M H2SO4",
+                "Comparison_Ref": "50 mV lower than Control Group"
             },
             {
-                "Metric": "Specific Capacitance",
-                "Value": "250 F/g",
-                "Conditions": "Current density 1 A/g"
-            }
-        ]
-    },
-    "Treatment Group B": {
-        "Performance_Metrics": [
-            {
-                "Metric": "Cell Viability",
-                "Value": "85% ± 5%",
-                "Conditions": "Concentration 100 μg/mL, 24h"
-            },
-            {
-                "Metric": "Tumor Inhibition Rate",
-                "Value": "60%",
-                "Conditions": "14 days post-injection"
+                "Metric": "Tafel Slope",
+                "Value": 45,
+                "Unit": "mV/dec",
+                "Error": "± 2",
+                "Condition": "Linear Sweep Voltammetry",
+                "Comparison_Ref": null
             }
         ]
     }
 }
+"""
 
-输出要求： 请仅输出最终的JSON格式结果。不要包含任何解释性文字。 """
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#markdown kv 可能是一种压缩的好方法

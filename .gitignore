@@ -28,3 +28,4 @@ ground_truth.json
 # evaluation results
 evaluation_reports/
 evaluation_report*.csv
+evaluation_results/
