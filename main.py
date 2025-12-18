@@ -1,14 +1,23 @@
 from servers.work_flows.extract_por_super import run_extraction_workflow
-from core.config import settings
+from servers.work_flows.mat_simple_1by1 import GeneralLiteratureWorkflow
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import os
+from servers.utils.TextProcess import TextProcessor
 from tqdm import tqdm
+workflow = GeneralLiteratureWorkflow()
+txt_processor = TextProcessor()
 def _process_single_file(args):
+    #处理，并解析文件
     input_path, output_dir = args
     base_name = os.path.splitext(os.path.basename(input_path))[0]
     output_path = os.path.join(output_dir, f"{base_name}_extracted.json")
-    run_extraction_workflow(input_path, output_path)
+    doc = txt_processor.read_pdf(input_path)
+    #定义工作流并运行
+    # run_extraction_workflow(input_path, output_path)
+    result = workflow.process_document(doc)
     return input_path, output_path, "completed"
+
+
 
 def process_directory(input_dir, output_dir, max_workers=None):
     if not os.path.isdir(input_dir):

@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     llm_model: str = Field(default="zhipuai/glm-4-plus", alias="LLM_MODEL")
     llm_api_key: Optional[str] = Field(default=None, alias="LLM_API_KEY")
     llm_base_url: Optional[str] = Field(default=None, alias="LLM_BASE_URL")
-    
+
     # LLM parameters
     temperature: float = Field(default=0.1, alias="TEMPERATURE", ge=0, le=2)
     top_p: float = Field(default=0.7, alias="TOP_P", ge=0, le=1)

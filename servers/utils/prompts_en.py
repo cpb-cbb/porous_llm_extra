@@ -207,12 +207,6 @@ Please output the final result in JSON format only. Do not include any explanato
 # 注意，电极的详细信息（质量负载等没有提取，后期需要提取，切记。
 prompt_1_4 = """
 
-好的，这是一个非常专业的修改。为了将负载量（mass loading）作为一个独立的、对机器学习模型友好的特征进行提取，我们将在`SpecificCapacitance`的数据结构中添加一个`mass_loading`字段。
-
-以下是为您更新后的提示词。修改的部分主要在`SpecificCapacitance`的提取规则和输出格式示例中，并用**粗体**标出。
-
----
-
 **Role Setting:** Electrochemical Performance Data Extraction Expert
 **Task:** For each sample, extract the core electrochemical performance under **different test systems**. This version is optimized for clarity, accuracy, and modeling needs.
 
