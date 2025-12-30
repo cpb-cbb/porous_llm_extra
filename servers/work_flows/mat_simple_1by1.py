@@ -1,3 +1,4 @@
+# 多个样本，逐个抽取不同领域的属性。
 import json
 import logging
 import re
