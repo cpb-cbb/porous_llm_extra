@@ -111,7 +111,7 @@ def get_agent_audit(source_text, flattened_json):
         model="gemini-2.5-pro", 
         messages=[{"role": "system", "content": "You are a QA auditor for data extraction. Output JSON only."}, 
                   {"role": "user", "content": prompt}],
-        temperature=0.0,
+        temperature=0.1,
         response_format={"type": "json_object"}
     )
     
