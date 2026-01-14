@@ -114,6 +114,21 @@ class RuleBasedEvaluator:
         matches = re.findall(pattern, str(text))
         return [float(m) for m in matches if m]
     
+    def calculate_weight(self, value: str) -> int:
+        """
+        计算权重：如果值包含>=4个纯数字，权重为数字个数，否则为1
+        
+        Args:
+            value: 待计算的值
+            
+        Returns:
+            权重值
+        """
+        numbers = self.extract_numbers(str(value))
+        if len(numbers) >= 4:
+            return len(numbers)
+        return 1
+    
     def is_pure_number(self, value: str) -> bool:
         """
         判断是否为纯数字
@@ -218,6 +233,9 @@ class RuleBasedEvaluator:
         
         # 1. 对比基准集中存在的键
         for key, ground_truth_value in ground_truth_for_file.items():
+            # 计算权重
+            weight = self.calculate_weight(ground_truth_value)
+            
             if key in flattened_data:
                 extracted_value = flattened_data[key]
                 status, reason = self.compare_values(extracted_value, ground_truth_value)
@@ -228,6 +246,7 @@ class RuleBasedEvaluator:
                     'Ground Truth': ground_truth_value,
                     'Status': status,
                     'Reason': reason,
+                    'Weight': weight,
                     'File': file_name
                 })
                 evaluated_keys.add(key)
@@ -239,6 +258,7 @@ class RuleBasedEvaluator:
                     'Ground Truth': ground_truth_value,
                     'Status': 'FN',
                     'Reason': '基准集中存在但提取数据中缺失',
+                    'Weight': weight,
                     'File': file_name
                 })
         
@@ -251,6 +271,7 @@ class RuleBasedEvaluator:
                     'Ground Truth': '',
                     'Status': 'FP',
                     'Reason': '提取数据中存在但基准集中不存在（可能是结构差异或异常）',
+                    'Weight': 1,
                     'File': file_name
                 })
         
@@ -314,28 +335,38 @@ class RuleBasedEvaluator:
         print(f"总记录数: {total}")
         
         if total > 0:
+            # 按权重统计
+            weighted_status = results_df.groupby('Status')['Weight'].sum()
+            total_weighted = results_df['Weight'].sum()
+            
+            print("\n状态分布（未加权）:")
             status_counts = results_df['Status'].value_counts()
-            print("\n状态分布:")
             for status, count in status_counts.items():
                 percentage = (count / total) * 100
                 print(f"  {status}: {count} ({percentage:.2f}%)")
             
-            # 计算准确率（TP / (TP + FP + FN)）
-            tp_count = status_counts.get('TP', 0)
-            fp_count = status_counts.get('FP', 0)
-            fn_count = status_counts.get('FN', 0)
-            skip_count = status_counts.get('SKIP', 0)
+            print("\n状态分布（加权后）:")
+            for status, weighted_count in weighted_status.items():
+                percentage = (weighted_count / total_weighted) * 100
+                print(f"  {status}: {weighted_count:.0f} ({percentage:.2f}%)")
+            
+            # 计算准确率（使用加权值）
+            tp_count = weighted_status.get('TP', 0)
+            fp_count = weighted_status.get('FP', 0)
+            fn_count = weighted_status.get('FN', 0)
+            skip_count = weighted_status.get('SKIP', 0)
             
             if tp_count + fp_count + fn_count > 0:
                 precision = tp_count / (tp_count + fp_count) if (tp_count + fp_count) > 0 else 0
                 recall = tp_count / (tp_count + fn_count) if (tp_count + fn_count) > 0 else 0
                 f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
                 
-                print(f"\n性能指标:")
+                print(f"\n性能指标（基于加权值）:")
                 print(f"  准确率 (Precision): {precision:.4f}")
                 print(f"  召回率 (Recall): {recall:.4f}")
                 print(f"  F1分数: {f1:.4f}")
-                print(f"  跳过的纯字符串对比: {skip_count}")
+                print(f"  跳过的纯字符串对比: {skip_count:.0f}")
+                print(f"\n说明: 对于包含3个及以上数字的ground truth，其权重为数字个数")
         
         print("="*60 + "\n")
 
