@@ -330,45 +330,69 @@ class RuleBasedEvaluator:
         print("\n" + "="*60)
         print("评估统计信息")
         print("="*60)
-        
-        total = len(results_df)
-        print(f"总记录数: {total}")
-        
-        if total > 0:
-            # 按权重统计
-            weighted_status = results_df.groupby('Status')['Weight'].sum()
-            total_weighted = results_df['Weight'].sum()
-            
-            print("\n状态分布（未加权）:")
-            status_counts = results_df['Status'].value_counts()
-            for status, count in status_counts.items():
-                percentage = (count / total) * 100
-                print(f"  {status}: {count} ({percentage:.2f}%)")
-            
-            print("\n状态分布（加权后）:")
-            for status, weighted_count in weighted_status.items():
-                percentage = (weighted_count / total_weighted) * 100
-                print(f"  {status}: {weighted_count:.0f} ({percentage:.2f}%)")
-            
-            # 计算准确率（使用加权值）
-            tp_count = weighted_status.get('TP', 0)
-            fp_count = weighted_status.get('FP', 0)
-            fn_count = weighted_status.get('FN', 0)
-            skip_count = weighted_status.get('SKIP', 0)
-            
-            if tp_count + fp_count + fn_count > 0:
-                precision = tp_count / (tp_count + fp_count) if (tp_count + fp_count) > 0 else 0
-                recall = tp_count / (tp_count + fn_count) if (tp_count + fn_count) > 0 else 0
-                f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
-                
-                print(f"\n性能指标（基于加权值）:")
-                print(f"  准确率 (Precision): {precision:.4f}")
-                print(f"  召回率 (Recall): {recall:.4f}")
-                print(f"  F1分数: {f1:.4f}")
-                print(f"  跳过的纯字符串对比: {skip_count:.0f}")
-                print(f"\n说明: 对于包含3个及以上数字的ground truth，其权重为数字个数")
-        
+
+        if results_df.empty:
+            print("无评估记录")
+            print("="*60 + "\n")
+            return
+
+        # 整体统计
+        self._print_section_statistics("整体", results_df)
+
+        # 按领域统计
+        domain_filters = {
+            'Synthesis': results_df[results_df['Key'].str.contains('Synthesis', na=False)],
+            'PhysicochemicalProperties': results_df[results_df['Key'].str.contains('PhysicochemicalProperties', na=False)],
+            'ElectrochemicalPerformance': results_df[results_df['Key'].str.contains('ElectrochemicalPerformance', na=False)]
+        }
+
+        for domain, df in domain_filters.items():
+            self._print_section_statistics(domain, df)
+
         print("="*60 + "\n")
+
+    def _print_section_statistics(self, title: str, df: pd.DataFrame):
+        """打印单个领域的统计信息"""
+        print(f"\n[{title}]")
+
+        total = len(df)
+        print(f"记录数: {total}")
+
+        if total == 0:
+            return
+
+        # 按权重统计
+        weighted_status = df.groupby('Status')['Weight'].sum()
+        total_weighted = df['Weight'].sum()
+
+        print("状态分布（未加权）:")
+        status_counts = df['Status'].value_counts()
+        for status, count in status_counts.items():
+            percentage = (count / total) * 100
+            print(f"  {status}: {count} ({percentage:.2f}%)")
+
+        print("状态分布（加权后）:")
+        for status, weighted_count in weighted_status.items():
+            percentage = (weighted_count / total_weighted) * 100 if total_weighted > 0 else 0
+            print(f"  {status}: {weighted_count:.0f} ({percentage:.2f}%)")
+
+        # 计算准确率（使用加权值）
+        tp_count = weighted_status.get('TP', 0)
+        fp_count = weighted_status.get('FP', 0)
+        fn_count = weighted_status.get('FN', 0)
+        skip_count = weighted_status.get('SKIP', 0)
+
+        if tp_count + fp_count + fn_count > 0:
+            precision = tp_count / (tp_count + fp_count) if (tp_count + fp_count) > 0 else 0
+            recall = tp_count / (tp_count + fn_count) if (tp_count + fn_count) > 0 else 0
+            f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
+
+            print("性能指标（基于加权值）:")
+            print(f"  准确率 (Precision): {precision:.4f}")
+            print(f"  召回率 (Recall): {recall:.4f}")
+            print(f"  F1分数: {f1:.4f}")
+            print(f"  跳过的纯字符串对比: {skip_count:.0f}")
+            print("  说明: 对于包含3个及以上数字的ground truth，其权重为数字个数")
 
 
 def main():
