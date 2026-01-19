@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore", case_sensitive=False)
 
     # LLM / API configuration
-    llm_model: str = Field(default="zhipuai/glm-4-plus", alias="LLM_MODEL")
+    llm_model: str = Field(default="zhipuai/glm-4.7", alias="LLM_MODEL")
     llm_api_key: Optional[str] = Field(default=None, alias="LLM_API_KEY")
     llm_base_url: Optional[str] = Field(default=None, alias="LLM_BASE_URL")
 
