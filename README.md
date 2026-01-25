@@ -1,5 +1,6 @@
-porous_llm_extra
-================
+# porous_llm_extra
+
+中文 | [English](README_EN.md)
 
 面向多孔炭超级电容文献的自动信息抽取与评估工具集，基于多 Agent 工作流完成样本预判、工艺/孔结构/电化学性能抽取，并提供指标计算与结果过滤脚本。
 
@@ -20,6 +21,14 @@ porous_llm_extra
 - [docs/architecture_overview.md](docs/architecture_overview.md)：架构与数据流示意。
 - [filter_csv.py](filter_csv.py)：过滤幻觉字段并重算 F1 的脚本，详见 [docs/csv_filtering_guide.md](docs/csv_filtering_guide.md)。
 - [evaluation_results](evaluation_results)：示例评估产物与汇总指标。
+
+文献数据获取
+------------
+
+本项目需要从文献中抽取信息，推荐使用以下工具批量获取 Elsevier 数据库的文献全文：
+
+📚 **[dowload_artical_from_doi_or_elsvier](https://github.com/cpb-cbb/dowload_artical_from_doi_or_elsvier)**
+基于 Elsevier API 的文献下载工具，支持通过 DOI 或检索条件批量获取全文 PDF/JSON。
 
 环境准备
 --------
@@ -187,6 +196,118 @@ python filter_csv.py evaluation_results/combined_detailed_report.csv \
 - **纯文本限制**：部分孔结构参数仅出现在图表或补充材料中，自动抽取存在缺口。
 - **召回率挑战**：能量/功率密度等信息在文献中稀疏，召回有限，可优先聚焦实验数据与孔结构参数。
 - **历史兼容**：旧版脚本位于 porous_carbon_info_extra/，如无兼容需求可忽略。
+
+## 适配到其他材料领域
+
+该框架可以轻松适配到其他材料科学领域（催化剂、电池、MOFs、聚合物等）。按以下步骤操作：
+
+### 步骤 1：定义领域模式
+
+在 `servers/utils/field_template.py` 中创建新的字段模板：
+
+```python
+YOUR_DOMAIN_TEMPLATE = {
+    "Synthesis": {
+        "Components": ["Precursors", "Solvents", ...],
+        "ProcessFlow": ["temperature", "duration", ...]
+    },
+    "Properties": {
+        "YourKey1": ["value", "unit", "conditions"],
+        "YourKey2": ["value", "unit"]
+    },
+    "Performance": {
+        "Metric1": ["value", "unit", "test_conditions"],
+        ...
+    }
+}
+```
+
+### 步骤 2：定制提示词
+
+在 `servers/utils/prompts_en.py` 中更新提示词以反映您的领域：
+
+```python
+PREJUDGE_PROMPT = """
+你正在分析 {YOUR_DOMAIN} 文献。
+任务：判断这篇论文是否与 {YOUR_MATERIAL_TYPE} 相关...
+"""
+
+EXTRACTION_PROMPT = """
+为每个 {SAMPLE_NAME} 提取以下信息：
+1. 合成条件
+2. {YOUR_PROPERTY_1}
+3. {YOUR_PROPERTY_2}
+...
+"""
+```
+
+### 步骤 3：修改 Agent
+
+根据需要调整 `servers/agents/` 中的 Agent 逻辑：
+
+- `prejudge_agent.py`：更新相关性判断标准
+- `process_extra_agent.py`：适配合成信息抽取逻辑
+- `micro_feature_agent.py`：替换为您的性质抽取 Agent
+- `ele_chem_extra_agent.py`：替换为您的性能抽取 Agent
+
+### 步骤 4：更新工作流
+
+修改 `servers/work_flows/extract_por_super.py`：
+
+```python
+def run_extraction_workflow(input_path, output_path):
+    # 1. 预判相关性
+    prejudge_result = prejudge_agent.process(text)
+  
+    # 2. 提取您领域特定的信息
+    synthesis_info = synthesis_agent.process(text, samples)
+    property_info = property_agent.process(text, samples)
+    performance_info = performance_agent.process(text, samples)
+  
+    # 3. 合并结果
+    final_result = merge_results(synthesis_info, property_info, performance_info)
+    ...
+```
+
+### 步骤 5：准备基准数据
+
+创建您领域特定的基准 CSV，包含以下列：
+
+- `File`：文档标识符
+- `Key`：扁平化字段路径（例如 "Sample1.Properties.YourKey.value"）
+- `Ground Truth`：预期值
+
+### 步骤 6：测试与迭代
+
+1. 在小型测试集上运行抽取
+2. 使用基于规则和基于 LLM 的方法进行评估
+3. 分析错误并优化提示词/模式
+4. 迭代直到精确率和召回率满足要求
+
+### 示例：适配到电池材料
+
+```python
+# 1. 定义模式
+BATTERY_TEMPLATE = {
+    "Synthesis": {...},
+    "ElectrochemicalProperties": {
+        "SpecificCapacity": ["value", "unit", "current_density"],
+        "CycleStability": ["capacity_retention", "cycle_number"],
+        "RateCapability": ["current_density", "capacity"]
+    }
+}
+
+# 2. 更新提示词
+BATTERY_EXTRACTION_PROMPT = """
+提取电池性能指标，包括：
+- 不同电流密度下的比容量 (mAh/g)
+- 循环稳定性（N 圈后的容量保持率 %）
+- 倍率性能数据
+...
+"""
+
+# 3. 测试与迭代
+```
 
 贡献与维护
 ----------
