@@ -173,7 +173,7 @@ def batch_convert_json_to_ml_dataset(input_dir: str, output_dir: str = None):
     
     # 设置输出目录
     if output_dir is None or output_dir == "":
-        output_path = input_path / 'csv_output'
+        output_path = input_path / 'csv_output_2026'
     else:
         output_path = Path(output_dir)
     
@@ -323,7 +323,11 @@ def extract_synthesis_data(sample_name: str, data: Dict, doi: str) -> Dict:
         'ratios': None,
         'max_temperature': None,
         'total_duration': None,
-        'atmospheres': None
+        'atmospheres': None,
+        'carb_tem': None,
+        'carb_atmos': None,
+        'act_tem': None,
+        'act_atmos': None
     }
     
     if data is None:
@@ -364,10 +368,21 @@ def extract_synthesis_data(sample_name: str, data: Dict, doi: str) -> Dict:
             max_temp = None
             total_duration = 0
             atmospheres = []
+            carb_temps = []
+            carb_atmos_list = []
+            act_temps = []
+            act_atmos_list = []
             
             for step in process_flow:
                 if not isinstance(step, dict):
                     continue
+                
+                # 获取步骤名称
+                step_name = safe_get(step, 'step_name', default='')
+                if step_name:
+                    step_name_lower = str(step_name).lower()
+                else:
+                    step_name_lower = ''
                 
                 # 温度
                 temp = safe_get(step, 'temperature')
@@ -391,10 +406,42 @@ def extract_synthesis_data(sample_name: str, data: Dict, doi: str) -> Dict:
                 atmosphere = safe_get(step, 'atmosphere')
                 if atmosphere and atmosphere not in atmospheres:
                     atmospheres.append(str(atmosphere))
+                
+                # 检查是否为碳化步骤
+                if 'carboni' in step_name_lower:
+                    if temp is not None:
+                        try:
+                            carb_temps.append(float(temp))
+                        except (ValueError, TypeError):
+                            pass
+                    if atmosphere:
+                        carb_atmos_list.append(str(atmosphere))
+                
+                # 检查是否为活化步骤
+                if 'activat' in step_name_lower:
+                    if temp is not None:
+                        try:
+                            act_temps.append(float(temp))
+                        except (ValueError, TypeError):
+                            pass
+                    if atmosphere:
+                        act_atmos_list.append(str(atmosphere))
             
             result['max_temperature'] = max_temp
             result['total_duration'] = total_duration if total_duration > 0 else None
             result['atmospheres'] = ', '.join(atmospheres) if atmospheres else None
+            
+            # 处理碳化温度和气氛
+            if carb_temps:
+                result['carb_tem'] = carb_temps if len(carb_temps) > 1 else carb_temps[0]
+            if carb_atmos_list:
+                result['carb_atmos'] = carb_atmos_list if len(carb_atmos_list) > 1 else carb_atmos_list[0]
+            
+            # 处理活化温度和气氛
+            if act_temps:
+                result['act_tem'] = act_temps if len(act_temps) > 1 else act_temps[0]
+            if act_atmos_list:
+                result['act_atmos'] = act_atmos_list if len(act_atmos_list) > 1 else act_atmos_list[0]
     
     except Exception as e:
         logger.warning(f"提取样品 {sample_name} 的合成数据时出错: {e}")
@@ -611,7 +658,7 @@ def batch_convert_json_to_csv(input_dir: str, output_dir: str = None):
     
     # 设置输出目录
     if output_dir is None or output_dir == "":
-        output_path = input_path / 'csv_output'
+        output_path = input_path / 'csv_output_2026'
     else:
         output_path = Path(output_dir)
     
@@ -716,23 +763,23 @@ def batch_convert_json_to_csv(input_dir: str, output_dir: str = None):
 
 
 if __name__ == "__main__":
-    # # 批量处理示例
-    # input_directory = "/Volumes/mac_outstore/毕业/jsol文献/biomass_super_2000/filtered_json/zhipu"
-    # output_directory = ""  # 空字符串表示使用默认目录
+    # 批量处理示例
+    input_directory = "/Volumes/mac_outstore/毕业/jsol文献/biomass_super_2000/filtered_json/zhipu"
+    output_directory = ""  # 空字符串表示使用默认目录
     
-    # # 批量转换
-    # df_syn, df_phys, df_elec, df_merged = batch_convert_json_to_csv(
-    #     input_directory, 
-    #     output_directory
-    # )
+    # 批量转换
+    df_syn, df_phys, df_elec, df_merged = batch_convert_json_to_csv(
+        input_directory, 
+        output_directory
+    )
     
-    # # 显示部分数据
-    # if df_syn is not None and not df_syn.empty:
-    #     print("\n合成数据预览:")
-    #     print(df_syn.head())
+    # 显示部分数据
+    if df_syn is not None and not df_syn.empty:
+        print("\n合成数据预览:")
+        print(df_syn.head())
         
-    #     print("\nDOI列示例:")
-    #     print(df_syn[['doi', 'sample_name']].head(10))
+        print("\nDOI列示例:")
+        print(df_syn[['doi', 'sample_name']].head(10))
     # 生成机器学习数据集
     input_directory = "/Volumes/mac_outstore/毕业/jsol文献/biomass_super_2000/filtered_json/zhipu"
     
